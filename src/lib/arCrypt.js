@@ -297,12 +297,12 @@ function encryptOneForeach(arr, keys) {
             // Promise.map awaits for returned promises
             return keyEncrypt(item, keys[ix]);
 
-        }).catch(function(err) {
-            // Return an error if something failed
-            reject(err);
         }).then(function (arr) {
             // Return collection of split encrypted items
             resolve(arr);
+        }).catch(function(err) {
+            // Return an error if something failed
+            reject(err);
         });
     });
 }
@@ -322,14 +322,22 @@ function keyEncrypt(item, key) {
         item = stringify(item);
 
         // Create a JOSE key object from the JSON key provided
+        jose.JWK.asKeyStore([key.key]).
+        then(function(keystore) {
 
-        // Encrypt the string using the key object
+            var keyObj =  keystore.all({ use: 'enc' });
 
-        console.log(key);
+            var input = new Buffer(item);
 
-        resolve({
-            alias: key.alias,
-            crypted: item
+            jose.JWE.createEncrypt(keyObj).
+            update(input).
+            final().
+            then(function(result) {
+                resolve({
+                    alias: key.alias,
+                    crypted: result
+                });
+            });
         });
     });
 }
