@@ -51,6 +51,7 @@ arCrypt.prototype.newKeys = newKeys;
 arCrypt.prototype.publicKeys = publicKeys;
 arCrypt.prototype.encryptEach = encryptEach;
 arCrypt.prototype.encrypt = encrypt;
+arCrypt.prototype.splitEncryptSecrets = splitEncryptSecrets;
 
 // Export the object
 module.exports = new arCrypt();
@@ -59,6 +60,38 @@ module.exports = new arCrypt();
 // ============================================================
 // Define the public functions used the object
 // ============================================================
+
+/**
+ * For each item split the secret and encrypt part for each key
+ * @param items
+ * @param keys
+ */
+function splitEncryptSecrets(items, keys) {
+    // Return many promise
+    return Promise.map(items, function (item) {
+
+        // Promise.map awaits for returned promises
+        return splitEncryptSecret(item, keys);
+
+    }).then(function (arr) {
+        // Return collection of split secret encrypted items
+        return arr;
+
+    }).catch(function(err) {
+        // Return an error if something failed
+        return Promise.reject({message: err});
+    })
+}
+
+/**
+ * For each item encrypt the secret for each key
+ * @param items
+ * @param keys
+ */
+function encryptSecrets(items, keys) {
+
+}
+
 
 /**
  * Provide new sign and encrypyt keys
@@ -115,12 +148,12 @@ function encryptEach(arr, keys, split) {
         // Promise.map awaits for returned promises
         return encrypt(item, keys, split);
 
-    }).catch(function(err) {
-        // Return an error if something failed
-        return Promise.reject({message: err});
     }).then(function (arr) {
         // Return collection of split encrypted items
         return arr;
+    }).catch(function(err) {
+        // Return an error if something failed
+        return Promise.reject({message: err});
     })
 }
 
@@ -139,6 +172,10 @@ function encrypt(item, keys, split) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
 
+        // Store the seq before stringifying
+        var seq = item.seq || false;
+
+        // Make sure we're encrypting a string
         item = stringify(item);
 
         // Create a unique shared key and initialization vector
@@ -155,10 +192,16 @@ function encrypt(item, keys, split) {
         // Convert the shared secret to a string
         var sharedSecretString = sharedSecret.toString('base64');
 
+        // Define the return item
         item  = {
             secret:  sharedSecretString,
             iv: ivString,
             crypted: crypted
+        }
+
+        // Add the sequence to return item if we have one
+        if(seq) {
+            item.seq = seq;
         }
 
         // If there were keys provided encrypt the secret for each key
@@ -233,40 +276,62 @@ function splitEncryptSecret(item, keys) {
 }
 
 /**
- * This will take an array of items and encrypt one using each key provided.
+ * This will take an array of items and encrypt one for each key provided.
  * You must have the exact same number of each element
  *
  * @param items
  * @param keys
  */
-function encryptOneForeach(items, keys) {
+function encryptOneForeach(arr, keys) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
 
         // make sure we have the same number of elements
-        if(items.length != _.size(keys)) {
+        if(arr.length != _.size(keys)) {
             var err = new APIError('500', 'Internal Server Error', 'Number of keys did not match the number of splits.');
             reject(err);
         }
 
-        resolve(items);
+        Promise.map(arr, function (item, ix) {
+
+            // Promise.map awaits for returned promises
+            return keyEncrypt(item, keys[ix]);
+
+        }).catch(function(err) {
+            // Return an error if something failed
+            reject(err);
+        }).then(function (arr) {
+            // Return collection of split encrypted items
+            resolve(arr);
+        });
     });
 }
 
-function encryptFor(items, key) {
-    // Return many promise
-    return Promise.map(arr, function (item) {
+/**
+ * Encrypt an item for a key
+ *
+ * @param item
+ * @param key
+ * @returns {bluebird|exports|module.exports}
+ */
+function keyEncrypt(item, key) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
 
-        // Promise.map awaits for returned promises
-        return encrypt(item, keys, split);
+        // Make sure we're encrypting a string
+        item = stringify(item);
 
-    }).catch(function(err) {
-        // Return an error if something failed
-        return Promise.reject({message: err});
-    }).then(function (arr) {
-        // Return collection of split encrypted items
-        return arr;
-    })
+        // Create a JOSE key object from the JSON key provided
+
+        // Encrypt the string using the key object
+
+        console.log(key);
+
+        resolve({
+            alias: key.alias,
+            crypted: item
+        });
+    });
 }
 
 /**

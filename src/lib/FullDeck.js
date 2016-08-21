@@ -77,7 +77,13 @@ function newShoe(data) {
             return shuffleShoe(data);
         }).
         then(function(data){
+            return indexCards(data);
+        }).
+        then(function(data){
             return encryptCards(data);
+        }).
+        then(function(data){
+            return splitEncryptSecrets(data);
         }).
         then(function(data){
             return cleanReturnData(data);
@@ -95,17 +101,79 @@ function newShoe(data) {
 // Define the private functions used the object
 // ============================================================
 
-function encryptCards(data) {
+function splitEncryptSecrets(shoe) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
-        // Symmetric encrypt cards
-        arCrypt.encryptEach(data.cards, data.keys, true).
-        then(function(cards){
-            data.cards = cards;
-            resolve(data);
-        }, function(err){
+        // Split secret and encrypt splits for each player
+        arCrypt.splitEncryptSecrets(shoe.cards, shoe.keys).
+        then(function(secretSplitCards){
+            shoe.cards = secretSplitCards
+            resolve(shoe);
+        },function(err){
             reject(err);
         })
+    });
+}
+
+
+function encryptCards(shoe) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+        // Symmetric encrypt cards, maintaining cardId
+        arCrypt.encryptEach(shoe.cards).
+        then(function(cards){
+            shoe.cards = cards;
+            resolve(shoe);
+        },function(err){
+            reject(err);
+        })
+    });
+}
+
+function indexCards(shoe) {
+    // Return promise right away
+    return new Promise(function (resolve, reject) {
+
+        // Get numbers of cards in shoe
+        var shoeSize = shoe.length;
+
+        // Counter to use when looping through shoe
+        var shoeCount;
+
+        // Variable for the current card when looping through shoe
+        var currentCard;
+
+        // The encrypted version of the currentCard
+        var crypted;
+
+        // The sequence of the card in the currentCard in the shoe
+        var seq;
+
+        // Get the number of cards in the shoe
+        var shoeSize = shoe.cards.length;
+
+        // Hash of card in loop
+        var hash;
+
+        // Loop through the shuffled shoe and encrypt the cards.
+        for (shoeCount = 0; shoeCount < shoeSize; shoeCount++) {
+
+            // Define the cards sequence in the shoe, don't start at zero.
+            seq = shoeCount + 1;
+
+            // Get the current card from the shoe.cards
+            currentCard = shoe.cards[shoeCount];
+
+            // Set the sequence for the current card
+            currentCard.seq = seq;
+
+            // Add the current card back to the shoe in the same place
+            shoe.cards[shoeCount] = currentCard;
+        }
+
+        // Resolve the promise with our encrypted deck.
+        resolve(shoe);
+
     });
 }
 
