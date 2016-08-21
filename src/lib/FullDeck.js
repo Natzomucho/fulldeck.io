@@ -99,10 +99,12 @@ function encryptCards(data) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
         // Symmetric encrypt cards
-        arCrypt.encryptEach(data.cards, data.keys).
+        arCrypt.encryptEach(data.cards, data.keys, true).
         then(function(cards){
             data.cards = cards;
             resolve(data);
+        }, function(err){
+            reject(err);
         })
     });
 }
@@ -253,21 +255,20 @@ function shuffleShoe(data) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
 
-            var shoeSize = data.cards.length, t, ix;
+        var shoeSize = data.cards.length, t, ix;
 
-            // Shuffle using
-            while (shoeSize) {
+        // Shuffle using
+        while (shoeSize) {
 
-                // Pick a remaining element…
-                ix = Math.floor(Math.random() * shoeSize--);
+            // Pick a remaining element…
+            ix = Math.floor(Math.random() * shoeSize--);
 
-                // And swap it with the current element.
-                t = data.cards[shoeSize];
-                data.cards[shoeSize] = data.cards[ix];
-                data.cards[ix] = t;
-            }
-
-            resolve(data);
+            // And swap it with the current element.
+            t = data.cards[shoeSize];
+            data.cards[shoeSize] = data.cards[ix];
+            data.cards[ix] = t;
         }
-    );
+
+        resolve(data);
+    });
 }

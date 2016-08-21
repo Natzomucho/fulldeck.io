@@ -108,17 +108,20 @@ function publicKeys() {
  * @param arr
  * @returns {*}
  */
-function encryptEach(arr) {
+function encryptEach(arr, keys, split) {
     // Return many promise
     return Promise.map(arr, function (item) {
 
         // Promise.map awaits for returned promises
-        return encrypt(item);
+        return encrypt(item, keys, split);
 
+    }).catch(function(err) {
+        // Return an error if something failed
+        return Promise.reject({message: err});
     }).then(function (arr) {
         // Return collection of split encrypted items
         return arr;
-    });
+    })
 }
 
 /**
@@ -132,10 +135,9 @@ function encryptEach(arr) {
  * @param item
  * @returns {bluebird|exports|module.exports}
  */
-function encrypt(item) {
+function encrypt(item, keys, split) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
-
 
         item = stringify(item);
 
@@ -154,13 +156,117 @@ function encrypt(item) {
         var sharedSecretString = sharedSecret.toString('base64');
 
         item  = {
-            sharedSecret:  sharedSecretString,
+            secret:  sharedSecretString,
             iv: ivString,
             crypted: crypted
         }
 
+        // If there were keys provided encrypt the secret for each key
+        if(keys) {
+            if(split) {
+                splitEncryptSecret(item, keys).
+                then(function(item) {
+                    resolve(item);
+                }, function(err) {
+                    reject(err);
+                });
+            } else {
+                encryptSecretForeach(item, keys).
+                then(function(item) {
+                    resolve(item);
+                });
+            }
+        } else {
+            resolve(item);
+        }
+    });
+}
+
+/**
+ * Encrypt the `secret` property of an object.
+ * The secret will be replaced with an array of secrets.
+ * Each key will have the full secret encrypted.
+ *
+ * @param item
+ * @param keys
+ */
+function encryptSecretForeach(item, keys) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+        item.secrets = keys;
+        delete item.secret;
         resolve(item);
     });
+}
+
+/**
+ * Encrypt the `secret` property of an object.
+ * The secret will be replaced with an array of secrets.
+ * The secret will be split into as many pieces as there are keys.
+ * Each key will have part of the secret encrypted for it.
+ *
+ * @param item
+ * @param keys
+ */
+function splitEncryptSecret(item, keys) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+
+        // Number of keys
+        var keyCount = _.size(keys);
+
+        // Split the key into a a piece for each key
+        var secretSplits = sssa.create(keyCount, keyCount, item.secret);
+
+        // Delete the secret now that we are done with it
+        delete item.secret;
+
+        // Encrypt the the split secret parts for the provide keys
+        encryptOneForeach(secretSplits, keys).
+        then(function(secrets) {
+            item.secrets = secrets;
+            resolve(item);
+        }, function(err) {
+            reject(err);
+        });
+    });
+}
+
+/**
+ * This will take an array of items and encrypt one using each key provided.
+ * You must have the exact same number of each element
+ *
+ * @param items
+ * @param keys
+ */
+function encryptOneForeach(items, keys) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+
+        // make sure we have the same number of elements
+        if(items.length != _.size(keys)) {
+            var err = new APIError('500', 'Internal Server Error', 'Number of keys did not match the number of splits.');
+            reject(err);
+        }
+
+        resolve(items);
+    });
+}
+
+function encryptFor(items, key) {
+    // Return many promise
+    return Promise.map(arr, function (item) {
+
+        // Promise.map awaits for returned promises
+        return encrypt(item, keys, split);
+
+    }).catch(function(err) {
+        // Return an error if something failed
+        return Promise.reject({message: err});
+    }).then(function (arr) {
+        // Return collection of split encrypted items
+        return arr;
+    })
 }
 
 /**
