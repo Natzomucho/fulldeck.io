@@ -93,10 +93,20 @@ function newShoe(data) {
             return encryptCards(data);
         }).
         then(function(data){
-            return splitEncryptSecrets(data);
+            data = splitSecrets(data);
+            return data;
         }).
         then(function(data){
-            return encryptShoe(data);
+            data = combineSplitSecrets(data);
+            return data;
+        }).
+        then(function(data){
+            data = encryptCombinedSecrets(data);
+            return data;
+        }).
+        then(function(data){
+            data = encryptShoe(data);
+            return data;
         }).
         then(function(data){
             resolve(data);
@@ -110,6 +120,84 @@ function newShoe(data) {
 // ============================================================
 // Define the private functions used the object
 // ============================================================
+
+function encryptCombinedSecrets(data) {
+
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+
+        var secrets;
+
+        Promise.map(data.keys, function (key) {
+
+            secrets = data.secrets[key.alias]
+
+            // Promise.map awaits for returned promises
+            return arCrypt.keyEncrypt(secrets, key);
+
+        }).then(function (arr) {
+            // Return collection of split encrypted items
+            data.secrets = arr;
+            resolve(data);
+        }).catch(function(err) {
+            // Return an error if something failed
+            reject(err);
+        });
+    });
+
+
+
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+
+        var secrets;
+
+        _.forEach(data.keys, function (key) {
+            secrets = data.secrets[key.alias];
+
+
+        });
+
+        resolve(data);
+
+    });
+}
+
+function combineSplitSecrets(data) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+
+        var combinedSecrets = {};
+
+        // Add each key alias to the combined object
+        _.forEach(data.keys, function (key) {
+            combinedSecrets[key.alias] = [];
+        });
+
+        // Local var for the cards to loop through
+        var cards = data.cards;
+
+        var cleanCards = [];
+
+        var secrets;
+
+        _.forEach(cards, function (value) {
+            console.log(value);
+            secrets = value.secrets;
+            _.forOwn(combinedSecrets, function(item, key) {
+                combinedSecrets[key].push({ seq: value.seq, secret: secrets.pop()})
+            });
+
+            delete value.secrets;
+            cleanCards.push(value);
+        });
+
+        data.secrets = combinedSecrets;
+        data.cards = cleanCards;
+
+        resolve(data);
+    });
+}
 
 /**
  * Encrypt the final shuffled shoe full of encrypted cards
@@ -126,6 +214,28 @@ function encryptShoe(shoe) {
         arCrypt.encryptForeach(shoe, keys).
         then(function(shoe){
             console.log('encryptShoe');
+            console.log(new Date());
+            resolve(shoe);
+        },function(err){
+            reject(err);
+        })
+    });
+}
+
+/**
+ * Split the secrets
+ *
+ * @param shoe
+ * @returns {bluebird|exports|module.exports}
+ */
+function splitSecrets(shoe) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+        // Split secret for each player
+        arCrypt.splitSecrets(shoe.cards, shoe.keys).
+        then(function(secretSplitCards){
+            shoe.cards = secretSplitCards;
+            console.log('splitSecrets');
             console.log(new Date());
             resolve(shoe);
         },function(err){

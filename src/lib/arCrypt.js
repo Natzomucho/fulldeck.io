@@ -61,10 +61,13 @@ arCrypt.prototype.encryptEach = encryptEach;
 arCrypt.prototype.encryptForeach = encryptForeach;
 
 // Encrypt an object with new iv and secret
-arCrypt.prototype.encrypt = encrypt;
+arCrypt.prototype.keyEncrypt = keyEncrypt;
 
 // Process an array of secret encrypted data, split the secret and encrypt part for each key
 arCrypt.prototype.splitEncryptSecrets = splitEncryptSecrets;
+
+// Process an array of secret encrypted data, split the secret for each key
+arCrypt.prototype.splitSecrets = splitSecrets;
 
 // Create keystore objects for all keys up front
 arCrypt.prototype.convertKeysToObjects = convertKeysToObjects;
@@ -158,6 +161,28 @@ function splitEncryptSecrets(items, keys) {
 
         // Promise.map awaits for returned promises
         return splitEncryptSecret(item, keys);
+
+    }).then(function (arr) {
+        // Return collection of split secret encrypted items
+        return arr;
+
+    }).catch(function(err) {
+        // Return an error if something failed
+        return Promise.reject({message: err});
+    })
+}
+
+/**
+ * For each item split the secret for each key
+ * @param items
+ * @param keys
+ */
+function splitSecrets(items, keys) {
+    // Return many promise
+    return Promise.map(items, function (item) {
+
+        // Promise.map awaits for returned promises
+        return splitSecret(item, keys);
 
     }).then(function (arr) {
         // Return collection of split secret encrypted items
@@ -370,6 +395,33 @@ function splitEncryptSecret(item, keys) {
         }, function(err) {
             reject(err);
         });
+    });
+}
+
+/**
+ * The secret will be replaced with an array of secrets.
+ * The secret will be split into as many pieces as there are keys.
+ *
+ * @param item
+ * @param keys
+ */
+function splitSecret(item, keys) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+
+        // Number of keys
+        var keyCount = _.size(keys);
+
+        // Split the key into a a piece for each key
+        var secretSplits = sssa.create(keyCount, keyCount, item.secret);
+
+        // Delete the secret now that we are done with it
+        delete item.secret;
+
+        item.secrets = secretSplits;
+
+        resolve(item);
+
     });
 }
 
