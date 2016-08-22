@@ -22,7 +22,10 @@ router.post('/decks', newShoe); // Get a signed and encrypted deck of cards
 router.post('/demo/decks/shuffled', shuffledShoe); // Get a deck at the shuffled stage
 router.post('/demo/decks/indexed', indexedShoe); // Get a deck at the indexed stage
 router.post('/demo/decks/encrypted', encryptedShoe); // Get a deck at the encrypted stage
-router.post('/demo/decks/split', splitEncryptedShoe); // Get a deck at the split secret encrypted stage
+router.post('/demo/decks/split', splitShoeSecrets); // Get a deck at the split secret stage
+router.post('/demo/decks/combined', combineSplitShoeSecrets); // Get a deck at the combined split secret stage
+router.post('/demo/decks/encrypt-combined', encryptCombineSplitShoeSecrets); // Get a deck at the combined split secret stage
+
 
 // Export the defined router
 module.exports = router;
@@ -127,6 +130,51 @@ function *splitEncryptedShoe(next) {
         try{
             var data = this.request.body;
             result = yield FullDeck.splitEncryptedShoe(data);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
+function *splitShoeSecrets(next) {
+    if (this.request.method == 'POST') {
+        let result;
+        try{
+            var data = this.request.body;
+            result = yield FullDeck.splitShoeSecrets(data);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
+function *combineSplitShoeSecrets(next) {
+    if (this.request.method == 'POST') {
+        let result;
+        try{
+            var data = this.request.body;
+            result = yield FullDeck.combineSplitShoeSecrets(data);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
+function *encryptCombineSplitShoeSecrets(next) {
+    if (this.request.method == 'POST') {
+        let result;
+        try{
+            var data = this.request.body;
+            result = yield FullDeck.encryptCombineSplitShoeSecrets(data);
             delete result.keys;
             this.body=result;
         }

@@ -57,6 +57,9 @@ FullDeck.prototype.shuffledShoe = shuffledShoe;
 FullDeck.prototype.indexedShoe = indexedShoe;
 FullDeck.prototype.encryptedShoe = encryptedShoe;
 FullDeck.prototype.splitEncryptedShoe = splitEncryptedShoe;
+FullDeck.prototype.splitShoeSecrets = splitShoeSecrets; // Get a deck at the split secret stage
+FullDeck.prototype.combineSplitShoeSecrets = combineSplitShoeSecrets; // Get a deck at the combined split secret stage
+FullDeck.prototype.encryptCombineSplitShoeSecrets = encryptCombineSplitShoeSecrets; // Get a deck at the combined split secret stage
 
 // Export the object
 module.exports = new FullDeck();
@@ -632,6 +635,132 @@ function splitEncryptedShoe(data) {
         }).
         then(function(data){
             return splitEncryptSecrets(data);
+        }).
+        then(function(data){
+            resolve(data);
+        }, function(err) {
+            reject(err);
+        });
+    });
+}
+
+/**
+ * Return a signed, encrypted, and shuffled shoe
+ * @param data
+ */
+function splitShoeSecrets(data) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+
+        // Start by making sure we have a valid shoe definition
+        defineShoe(data).
+        then(function(data){
+            return createShoe(data);
+        }).
+        then(function(data){
+            data = arCrypt.convertKeysToObjects(data);
+            return data;
+        }).
+        then(function(data){
+            return shuffleShoe(data);
+        }).
+        then(function(data){
+            return indexCards(data);
+        }).
+        then(function(data){
+            return encryptCards(data);
+        }).
+        then(function(data){
+            data = splitSecrets(data);
+            return data;
+        }).
+        then(function(data){
+            resolve(data);
+        }, function(err) {
+            reject(err);
+        });
+    });
+}
+
+/**
+ * Return a signed, encrypted, and shuffled shoe
+ * @param data
+ */
+function combineSplitShoeSecrets(data) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+
+        // Start by making sure we have a valid shoe definition
+        defineShoe(data).
+        then(function(data){
+            return createShoe(data);
+        }).
+        then(function(data){
+            data = arCrypt.convertKeysToObjects(data);
+            return data;
+        }).
+        then(function(data){
+            return shuffleShoe(data);
+        }).
+        then(function(data){
+            return indexCards(data);
+        }).
+        then(function(data){
+            return encryptCards(data);
+        }).
+        then(function(data){
+            data = splitSecrets(data);
+            return data;
+        }).
+        then(function(data){
+            data = combineSplitSecrets(data);
+            return data;
+        }).
+        then(function(data){
+            resolve(data);
+        }, function(err) {
+            reject(err);
+        });
+    });
+}
+
+/**
+ * Return a signed, encrypted, and shuffled shoe
+ * @param data
+ */
+function encryptCombineSplitShoeSecrets(data) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+
+        // Start by making sure we have a valid shoe definition
+        defineShoe(data).
+        then(function(data){
+            return createShoe(data);
+        }).
+        then(function(data){
+            data = arCrypt.convertKeysToObjects(data);
+            return data;
+        }).
+        then(function(data){
+            return shuffleShoe(data);
+        }).
+        then(function(data){
+            return indexCards(data);
+        }).
+        then(function(data){
+            return encryptCards(data);
+        }).
+        then(function(data){
+            data = splitSecrets(data);
+            return data;
+        }).
+        then(function(data){
+            data = combineSplitSecrets(data);
+            return data;
+        }).
+        then(function(data){
+            data = encryptCombinedSecrets(data);
+            return data;
         }).
         then(function(data){
             resolve(data);
