@@ -439,7 +439,6 @@ function keyEncrypt(item, key) {
             });
         }
 
-
         // Create a JOSE key object from the JSON key provided
         jose.JWK.asKeyStore(key).
         then(function(keystore) {
