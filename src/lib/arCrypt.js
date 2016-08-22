@@ -47,11 +47,27 @@ const orgKeys = require('../config/keys');
 function arCrypt() {}
 
 // Add properties to the exported functions prototype
+
+// Get new signing and encrypting public/private keys
 arCrypt.prototype.newKeys = newKeys;
+
+// Get the Org signing keys
 arCrypt.prototype.publicKeys = publicKeys;
+
+// Use a different secret and iv to encrypt each element of an array
 arCrypt.prototype.encryptEach = encryptEach;
+
+// Encrypt a single item for multiple recipient keys
+arCrypt.prototype.encryptForeach = encryptForeach;
+
+// Encrypt an object with new iv and secret
 arCrypt.prototype.encrypt = encrypt;
+
+// Process an array of secret encrypted data, split the secret and encrypt part for each key
 arCrypt.prototype.splitEncryptSecrets = splitEncryptSecrets;
+
+// Create keystore objects for all keys up front
+arCrypt.prototype.convertKeysToObjects = convertKeysToObjects;
 
 // Export the object
 module.exports = new arCrypt();
@@ -60,6 +76,76 @@ module.exports = new arCrypt();
 // ============================================================
 // Define the public functions used the object
 // ============================================================
+
+/**
+ * Secret encrypt the item for multiple keys
+ * Secret encrypt the item, then key encrypt the secret
+ * @param item
+ * @param keys
+ *
+ * @return
+ * {
+ *  crypted: {},
+ *  secrets: []
+ * }
+ */
+function encryptForeach(item, keys) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+        encrypt(item, keys).
+        then(function(encrypted){
+            // We sent keys so the secret will be encrypted for each.
+            // We unset the public secret
+            delete encrypted.secret;
+            resolve(encrypted);
+        });
+    });
+}
+
+/**
+ * Replaces an objects JSON `keys` property with key objects
+ *
+ * @param data
+ * @returns {bluebird|exports|module.exports}
+ */
+function convertKeysToObjects(data) {
+
+    // Return many promise
+    return Promise.map(data.keys, function (key) {
+
+        // Promise.map awaits for returned promises
+        return keyStore(key);
+
+    }).then(function (keys) {
+        // Return collection of split secret encrypted items
+        data.keys = keys;
+        return data;
+
+    }).catch(function(err) {
+        // Return an error if something failed
+        return Promise.reject({message: err});
+    })
+}
+
+/**
+ * Return a Keystore
+ * @param key
+ * @returns {bluebird|exports|module.exports}
+ */
+function keyStore(key) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+        // Create a JOSE key object from the JSON key provided
+        jose.JWK.asKeyStore(key).then(function (keystore) {
+            resolve({
+                alias: key.alias,
+                keystore: keystore,
+                keys: key.keys
+            });
+        });
+    });
+}
+
 
 /**
  * For each item split the secret and encrypt part for each key
@@ -236,9 +322,22 @@ function encrypt(item, keys, split) {
 function encryptSecretForeach(item, keys) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
-        item.secrets = keys;
-        delete item.secret;
-        resolve(item);
+
+        return Promise.map(keys, function (key) {
+
+            // Promise.map awaits for returned promises
+            return keyEncrypt(item.secret, key);
+
+        }).then(function (encryptedSecrets) {
+            console.log(encryptedSecrets);
+            // Return collection of split encrypted items
+            delete item.keys;
+            item.secrets = encryptedSecrets;
+            resolve(item);
+        }).catch(function(err) {
+            // Return an error if something failed
+            reject(err);
+        });
     });
 }
 
@@ -267,7 +366,7 @@ function splitEncryptSecret(item, keys) {
         // Encrypt the the split secret parts for the provide keys
         encryptOneForeach(secretSplits, keys).
         then(function(secrets) {
-            item.secrets = secrets;
+            //item.secrets = secrets;
             resolve(item);
         }, function(err) {
             reject(err);
@@ -321,8 +420,28 @@ function keyEncrypt(item, key) {
         // Make sure we're encrypting a string
         item = stringify(item);
 
+        // If the keys already have key objects use them
+        if(key.keystore) {
+
+            jose.JWK.asKeyStore(key.keystore).
+            then(function(keystore) {
+
+                var input = new Buffer(item);
+
+                var keyObj = keystore.all({use: 'enc'});
+
+                jose.JWE.createEncrypt(keyObj).update(input).final().then(function (result) {
+                    resolve({
+                        alias: key.alias,
+                        crypted: result
+                    });
+                });
+            });
+        }
+
+
         // Create a JOSE key object from the JSON key provided
-        jose.JWK.asKeyStore([key.key]).
+        jose.JWK.asKeyStore(key).
         then(function(keystore) {
 
             var keyObj =  keystore.all({ use: 'enc' });

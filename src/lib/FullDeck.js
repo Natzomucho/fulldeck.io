@@ -34,7 +34,7 @@ const arCrypt = require('./arCrypt');
 const orgKeys = require('../config/keys');
 
 // Default shoe definition
-const deckDefinition = {
+var deckDefinition = {
     suits: ['H','C', 'D', 'S'],
     jokers: 0,
     ranks: ['A','2','3','4','5','6','7','8','9','10','J','Q','K']
@@ -74,6 +74,10 @@ function newShoe(data) {
             return createShoe(data);
         }).
         then(function(data){
+            data = arCrypt.convertKeysToObjects(data);
+            return data;
+        }).
+        then(function(data){
             return shuffleShoe(data);
         }).
         then(function(data){
@@ -86,7 +90,7 @@ function newShoe(data) {
             return splitEncryptSecrets(data);
         }).
         then(function(data){
-            return cleanReturnData(data);
+            return encryptShoe(data);
         }).
         then(function(data){
             resolve(data);
@@ -101,6 +105,33 @@ function newShoe(data) {
 // Define the private functions used the object
 // ============================================================
 
+/**
+ * Encrypt the final shuffled shoe full of encrypted cards
+ *
+ * @param shoe
+ * @returns {bluebird|exports|module.exports}
+ */
+function encryptShoe(shoe) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+        // Split secret and encrypt splits for each player
+        var keys = shoe.keys;
+        delete shoe.keys;
+        arCrypt.encryptForeach(shoe, keys).
+        then(function(shoe){
+            resolve(shoe);
+        },function(err){
+            reject(err);
+        })
+    });
+}
+
+/**
+ * Encrypt each card and encrypt the split for the players
+ *
+ * @param shoe
+ * @returns {bluebird|exports|module.exports}
+ */
 function splitEncryptSecrets(shoe) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
@@ -115,7 +146,11 @@ function splitEncryptSecrets(shoe) {
     });
 }
 
-
+/**
+ * Encrypt each card
+ * @param shoe
+ * @returns {bluebird|exports|module.exports}
+ */
 function encryptCards(shoe) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
@@ -130,6 +165,12 @@ function encryptCards(shoe) {
     });
 }
 
+/**
+ * Index a shuffled deck
+ *
+ * @param shoe
+ * @returns {bluebird|exports|module.exports}
+ */
 function indexCards(shoe) {
     // Return promise right away
     return new Promise(function (resolve, reject) {
@@ -181,6 +222,7 @@ function indexCards(shoe) {
  * Remove elements we don't want to return
  * @param data
  * @returns {bluebird|exports|module.exports}
+ * @DEPRECATED
  */
 function cleanReturnData(data) {
     // Return a Promise right away
