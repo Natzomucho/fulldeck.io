@@ -125,6 +125,8 @@ function encryptShoe(shoe) {
         delete shoe.keys;
         arCrypt.encryptForeach(shoe, keys).
         then(function(shoe){
+            console.log('encryptShoe');
+            console.log(new Date());
             resolve(shoe);
         },function(err){
             reject(err);
@@ -144,7 +146,9 @@ function splitEncryptSecrets(shoe) {
         // Split secret and encrypt splits for each player
         arCrypt.splitEncryptSecrets(shoe.cards, shoe.keys).
         then(function(secretSplitCards){
-            shoe.cards = secretSplitCards
+            shoe.cards = secretSplitCards;
+            console.log('splitEncryptSecrets');
+            console.log(new Date());
             resolve(shoe);
         },function(err){
             reject(err);
@@ -164,6 +168,8 @@ function encryptCards(shoe) {
         arCrypt.encryptEach(shoe.cards).
         then(function(cards){
             shoe.cards = cards;
+            console.log('encryptCards');
+            console.log(new Date());
             resolve(shoe);
         },function(err){
             reject(err);
@@ -217,7 +223,8 @@ function indexCards(shoe) {
             // Add the current card back to the shoe in the same place
             shoe.cards[shoeCount] = currentCard;
         }
-
+        console.log('indexCards');
+        console.log(new Date());
         // Resolve the promise with our encrypted deck.
         resolve(shoe);
 
@@ -384,7 +391,8 @@ function shuffleShoe(data) {
             data.cards[shoeSize] = data.cards[ix];
             data.cards[ix] = t;
         }
-
+        console.log('shuffled');
+        console.log(new Date());
         resolve(data);
     });
 }

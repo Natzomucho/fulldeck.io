@@ -329,7 +329,6 @@ function encryptSecretForeach(item, keys) {
             return keyEncrypt(item.secret, key);
 
         }).then(function (encryptedSecrets) {
-            console.log(encryptedSecrets);
             // Return collection of split encrypted items
             delete item.keys;
             item.secrets = encryptedSecrets;
