@@ -30,11 +30,13 @@ const routes = router.routes();
 /**
  * Print out the routes
  */
+var func = false;
 console.log('** Routed Endpoints **');
 _.forEach(routes.router.stack, function(value) {
+    func = value.stack[0];
     _.forEach(value.methods, function(method) {
         if(method != 'HEAD') {
-            console.log(method + "\t" + value.path);
+            console.log(method + "\t" + value.path + ' -> ' + func.name);
         }
     });
 });

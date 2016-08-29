@@ -1,11 +1,53 @@
 var router = require('koa-router')();
 
-router.get('/', function *(next) {
-  yield this.render('index', {
-    title: 'Hello World Koa!',
-    template: 'mobile',
-    body: 'Whazzip?'
-  });
-});
+const siteName = 'FullDeck.io';
+
+/**
+ * Define routes and handlers
+ */
+router.get('/', homepage);
+router.get('/technology', technology);
+router.get('/security', security);
+router.get('/legal', legal);
+router.get('/demo', demo);
 
 module.exports = router;
+
+/**
+ * Define the handlers views
+ */
+
+function *homepage(next) {
+    yield this.render('homepage', {
+        siteName: siteName,
+        title: 'Welcome to FullDeck.io'
+    });
+}
+
+function *technology(next) {
+    yield this.render('technology', {
+        siteName: siteName,
+        title: 'Technology'
+    });
+}
+
+function *security(next) {
+    yield this.render('security', {
+        siteName: siteName,
+        title: 'Security'
+    });
+}
+
+function *legal(next) {
+    yield this.render('legal', {
+        siteName: 'FullDeck.io',
+        title: 'Legal'
+    });
+}
+
+function *demo(next) {
+    yield this.render('demo', {
+        siteName: 'FullDeck.io',
+        title: 'Demo'
+    });
+}

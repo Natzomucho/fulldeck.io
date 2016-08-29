@@ -72,6 +72,9 @@ arCrypt.prototype.splitSecrets = splitSecrets;
 // Create keystore objects for all keys up front
 arCrypt.prototype.convertKeysToObjects = convertKeysToObjects;
 
+// Read a key and create a key object from it.
+arCrypt.prototype.readKey = readKey;
+
 // Export the object
 module.exports = new arCrypt();
 
@@ -79,6 +82,12 @@ module.exports = new arCrypt();
 // ============================================================
 // Define the public functions used the object
 // ============================================================
+
+function readKey(key) {
+    // Return a Promise right away
+    var k = new Buffer(key.private);
+    return keyStore([k]);
+}
 
 /**
  * Secret encrypt the item for multiple keys
@@ -217,10 +226,10 @@ function newKeys() {
         var keystore = jose.JWK.createKeyStore();
 
         // Add an encryption key to the keystore
-        keystore.generate("EC", "P-521", {use: 'enc'}).
+        keystore.generate("EC", "P-256", {use: 'enc'}).
         then(function() {
             // Add a signing key to the keystore
-            keystore.generate("EC", "P-521", {use: 'sign'}).
+            keystore.generate("EC", "P-256", {use: 'sign'}).
             then(function() {
                 // Return the JSON representation of the full key
                 resolve(keystore.toJSON(true));

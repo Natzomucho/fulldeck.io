@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= it.siteName %> - <%= it.title %></title>
+    <meta charset="UTF-8">
+    <%# def.css %>
+    <%# def.js %>
+</head>
+<body>
+    <%= it.body %>
+    <%# def.footerjs %>
+</body>
+</html>

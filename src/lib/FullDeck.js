@@ -60,6 +60,7 @@ FullDeck.prototype.splitEncryptedShoe = splitEncryptedShoe;
 FullDeck.prototype.splitShoeSecrets = splitShoeSecrets; // Get a deck at the split secret stage
 FullDeck.prototype.combineSplitShoeSecrets = combineSplitShoeSecrets; // Get a deck at the combined split secret stage
 FullDeck.prototype.encryptCombineSplitShoeSecrets = encryptCombineSplitShoeSecrets; // Get a deck at the combined split secret stage
+FullDeck.prototype.readKey = readKey; // Read a key
 
 // Export the object
 module.exports = new FullDeck();
@@ -513,6 +514,14 @@ function shuffleShoe(data) {
 // ============================================================
 // Demo functions returning partially constructed objects
 // ============================================================
+
+/**
+ * Return a shuffled shoe
+ * @param data
+ */
+function readKey(data) {
+    return arCrypt.readKey(data);
+}
 
 /**
  * Return a shuffled shoe

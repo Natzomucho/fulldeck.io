@@ -7,14 +7,23 @@ const json = require('koa-json-body');
 const onerror = require('koa-onerror');
 const send = require('koa-send');
 
-const app = koa();
-
-var logOpts = {
+// Define log options
+const logOpts = {
     name: "ActiveRules", // log name
     logRequest: true, // log request
     logResponse: true, // log response
     logError: true // log error
 };
+
+/**
+ * Create App
+ */
+const app = koa();
+
+/**
+ * Use the logger
+ */
+app.use(logger(logOpts));
 
 /**
  * Fall through HTTP API Error handler.
@@ -43,13 +52,13 @@ app.use(json({ limit: '2mb' }));
 const dot = require('koa-dot');
 app.use(dot({
         // other options supported by doT.process can be passed here
-        path: [__dirname + '/views', __dirname +'/views/partials'],
+        path: [__dirname + '/views', __dirname +'/views/pages'],
         // or path: ['./views', './shared'],
         // .dot template names across all folders should be unique,
         // .def files are used only from the current folder (names can repeat across folders)
-        // layout: false, // false by default, can be layout view name
+        layout: 'html5', // false by default, can be layout view name
         // body: 'body', // 'body' is default, only used with layout
-        // interpolation: { start: '<%', end: '%>' } // allows to replace '{{' and '}}'
+        interpolation: { start: '<%', end: '%>' } // allows to replace '{{' and '}}'
     })
 );
 

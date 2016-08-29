@@ -25,7 +25,7 @@ router.post('/demo/decks/encrypted', encryptedShoe); // Get a deck at the encryp
 router.post('/demo/decks/split', splitShoeSecrets); // Get a deck at the split secret stage
 router.post('/demo/decks/combined', combineSplitShoeSecrets); // Get a deck at the combined split secret stage
 router.post('/demo/decks/encrypt-combined', encryptCombineSplitShoeSecrets); // Get a deck at the combined split secret stage
-
+router.post('/demo/readkey', readKey); // Create a key object from a provided hex key.
 
 // Export the defined router
 module.exports = router;
@@ -79,6 +79,21 @@ function *publicKeys(next) {
 // ============================================================
 // Demo route handlers
 // ============================================================
+
+function *readKey(next) {
+    if (this.request.method == 'POST') {
+        let result;
+        try{
+            var data = this.request.body;
+            result = yield FullDeck.readKey(data);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
 
 function *shuffledShoe(next) {
     if (this.request.method == 'POST') {
