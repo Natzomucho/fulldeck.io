@@ -12,6 +12,8 @@
     "co": "^4.6.0",
     "co-body": "^4.2.0",
     "debug": "^2.2.0",
+    "eccrypto": "^1.0.3",
+    "elliptic": "^6.3.1",
     "joi": "^8.4.2",
     "json-stable-stringify": "^1.0.1",
     "koa": "^1.1.2",

@@ -12,6 +12,10 @@ const Promise = require('bluebird');
 // Use JOSE standard
 const jose = require('node-jose');
 
+// Use Elliptic module for EC keys
+const EC = require('elliptic').ec;
+var ec = new EC('secp256k1');
+
 // Convenience functions
 const _ = require('lodash');
 
@@ -39,6 +43,8 @@ const sharedEncryptAlgo = 'aes-128-cbc';
 // The FullDeck Org signing and encryption keys
 const orgKeys = require('../config/keys');
 
+// Elliptic curve encryption
+const eccrypto = require("eccrypto");
 // ============================================================
 // Define the Object
 // ============================================================
@@ -75,6 +81,15 @@ arCrypt.prototype.convertKeysToObjects = convertKeysToObjects;
 // Read a key and create a key object from it.
 arCrypt.prototype.readKey = readKey;
 
+// Create a key pair given a secret
+arCrypt.prototype.keyFromSecret = keyFromSecret;
+
+// Encrypt data for key
+arCrypt.prototype.pubEncrypt = pubEncrypt;
+
+// Decrypt data w/ private key
+arCrypt.prototype.pubDecrypt = pubDecrypt;
+
 // Export the object
 module.exports = new arCrypt();
 
@@ -82,12 +97,78 @@ module.exports = new arCrypt();
 // ============================================================
 // Define the public functions used the object
 // ============================================================
+function keyFromSecret(input) {
+    return new Promise(function (resolve, reject) {
+        // Return a Promise right away
+        var k = ec.keyFromPublic(input.public, 'hex');
+        resolve(k);
+    })
+}
+
+function pubEncrypt(input) {
+
+    var privateKeyA = new Buffer(input.private,'hex');
+
+    var publicKeyA = new Buffer(input.public,'hex');
+    //var publicKeyA =  eccrypto.getPublic(privateKeyA);
+    //console.log(publicKeyA);
+     //console.log(publicKeyA.toString('hex'));
+    //var privateKeyB = crypto.randomBytes(32);
+    //var publicKeyB = eccrypto.getPublic(privateKeyB);
+
+        return eccrypto.encrypt(publicKeyA, input.cleartext).then(function(encrypted) {
+
+            eccrypto.decrypt(privateKeyA, encrypted).then(function(plaintext) {
+                console.log("Message to part A:", plaintext.toString());
+            });
+
+            return {
+                "iv": encrypted.iv.toString('hex'),
+                "ephemPublicKey": encrypted.ephemPublicKey.toString('hex'),
+                "ciphertext": encrypted.ciphertext.toString('hex'),
+                "mac": encrypted.mac.toString('hex')
+            }
+
+        });
+
+}
+
+function pubDecrypt(input) {
+
+    var privateKeyA = new Buffer(input.private,'hex');
+
+    //var publicKeyA = new Buffer(input.public,'hex');
+    //var publicKeyA =  eccrypto.getPublic(privateKeyA);
+    //console.log(publicKeyA);
+    console.log(privateKeyA.toString('hex'));
+    //var privateKeyB = crypto.randomBytes(32);
+    //var publicKeyB = eccrypto.getPublic(privateKeyB);
+
+    var bufferObj =  {
+        "iv": new Buffer(input.crypted.iv,'hex'),
+        "ephemPublicKey": new Buffer(input.crypted.ephemPublicKey,'hex'),
+        "ciphertext": new Buffer(input.crypted.ciphertext,'hex'),
+        "mac": new Buffer(input.crypted.mac,'hex')
+    };
+
+    return eccrypto.decrypt(privateKeyA, bufferObj).then(function(plaintext) {
+        console.log("Message to part B:", plaintext.toString());
+        return plaintext;
+    });
+
+
+
+}
 
 function readKey(key) {
-    // Return a Promise right away
-    var k = new Buffer(key.private);
-    return keyStore([k]);
+    return new Promise(function (resolve, reject) {
+        // Return a Promise right away
+        var k = ec.keyFromPublic(key.public, 'hex');
+        resolve(k);
+    })
 }
+
+
 
 /**
  * Secret encrypt the item for multiple keys
@@ -535,6 +616,3 @@ function newIV() {
     // Create a completely random secret
     return crypto.randomBytes(16); // 128-bits === 16-bytes
 }
-
-
-

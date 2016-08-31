@@ -26,6 +26,9 @@ router.post('/demo/decks/split', splitShoeSecrets); // Get a deck at the split s
 router.post('/demo/decks/combined', combineSplitShoeSecrets); // Get a deck at the combined split secret stage
 router.post('/demo/decks/encrypt-combined', encryptCombineSplitShoeSecrets); // Get a deck at the combined split secret stage
 router.post('/demo/readkey', readKey); // Create a key object from a provided hex key.
+router.post('/demo/sign', testSign); // Sign a piece of text and have the sig verified
+router.post('/demo/encrypt', testEncrypt); // Sign a piece of text to see if it can be unencrypted
+router.post('/demo/decrypt', testDecrypt); // Decrypt encrypted text
 
 // Export the defined router
 module.exports = router;
@@ -86,6 +89,51 @@ function *readKey(next) {
         try{
             var data = this.request.body;
             result = yield FullDeck.readKey(data);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
+function *testSign(next) {
+    if (this.request.method == 'POST') {
+        let result;
+        try{
+            var data = this.request.body;
+            result = yield FullDeck.testSign(data);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
+function *testDecrypt(next) {
+    if (this.request.method == 'POST') {
+        let result;
+        try{
+            var data = this.request.body;
+            result = yield FullDeck.testDecrypt(data);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
+function *testEncrypt(next) {
+    if (this.request.method == 'POST') {
+        let result;
+        try{
+            var data = this.request.body;
+            result = yield FullDeck.testEncrypt(data);
             delete result.keys;
             this.body=result;
         }

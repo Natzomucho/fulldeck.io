@@ -33,6 +33,9 @@ const arCrypt = require('./arCrypt');
 // The FullDeck Org signing and encryption keys
 const orgKeys = require('../config/keys');
 
+// Elliptic signing keys
+const orgSignKey = arCrypt.keyFromSecret('042b514afb1e98a833271bd4e67507cce024cbc9ed73c0531f4af60237ec8eda18dcfc867374c4e446eb27cea09af583822375e76f99db6223634f4a5967f67f60');
+
 // Default shoe definition
 var deckDefinition = {
     suits: ['H','C', 'D', 'S'],
@@ -61,6 +64,9 @@ FullDeck.prototype.splitShoeSecrets = splitShoeSecrets; // Get a deck at the spl
 FullDeck.prototype.combineSplitShoeSecrets = combineSplitShoeSecrets; // Get a deck at the combined split secret stage
 FullDeck.prototype.encryptCombineSplitShoeSecrets = encryptCombineSplitShoeSecrets; // Get a deck at the combined split secret stage
 FullDeck.prototype.readKey = readKey; // Read a key
+FullDeck.prototype.testSign = testSign; // Sign text
+FullDeck.prototype.testEncrypt = testEncrypt; // Encrypt text
+FullDeck.prototype.testDecrypt = testDecrypt; // Encrypt text
 
 // Export the object
 module.exports = new FullDeck();
@@ -519,6 +525,19 @@ function shuffleShoe(data) {
  * Return a shuffled shoe
  * @param data
  */
+
+function testSign(data) {
+    return arCrypt.sign(orgSignKey,data);
+}
+
+function testEncrypt(data) {
+    return arCrypt.pubEncrypt(data);
+}
+
+function testDecrypt(data) {
+    return arCrypt.pubDecrypt(data);
+}
+
 function readKey(data) {
     return arCrypt.readKey(data);
 }
