@@ -1,6 +1,9 @@
 <script src="/bower_components/kjur-jsrsasign/jsrsasign-latest-all-min.js"></script>
-
+<script src="/js/out4.js"></script>
 <script language="JavaScript" type="text/javascript">
+var key = ecx.getKey();
+alert(key.private);
+alert(key.public);
 function doGenerate() {
   var f1 = document.form1;
   var curve = f1.curve1.value;
