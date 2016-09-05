@@ -155,9 +155,6 @@ function pubDecrypt(input) {
         console.log("Message to part B:", plaintext.toString());
         return plaintext;
     });
-
-
-
 }
 
 function readKey(key) {
@@ -167,8 +164,6 @@ function readKey(key) {
         resolve(k);
     })
 }
-
-
 
 /**
  * Secret encrypt the item for multiple keys

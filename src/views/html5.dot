@@ -1,13 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= it.siteName %> - <%= it.title %></title>
+    <title><%= it.site.name %> - <%= it.page.title %></title>
     <meta charset="UTF-8">
     <%# def.css %>
     <%# def.js %>
+<%? it.site.gaTrackingId %>
+    <!-- Google Analytics -->
+    <script>
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', '<%= it.site.gaTrackingId %>', 'auto');
+    ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <!-- End Google Analytics -->
+<%?%>
 </head>
 <body>
+<%? it.page.header %>
+    <%= it.page.header %>
+<%?%>
     <%= it.body %>
-    <%# def.footerjs %>
+<%? it.page.footer %>
+    <%= it.page.footer %>
+<%?%>
 </body>
 </html>

@@ -1,6 +1,15 @@
-var router = require('koa-router')();
+const router = require('koa-router')();
 
 const siteName = 'FullDeck.io';
+
+// ActiveRules Crypto lib wrapper
+const arLx = require('../lib/arLx');
+const lx = new arLx('en_US');
+
+// Set some global data
+let pageData = {};
+pageData.site = {};
+pageData.site.name = siteName;
 
 /**
  * Define routes and handlers
@@ -46,8 +55,14 @@ function *legal(next) {
 }
 
 function *demo(next) {
-    yield this.render('demo', {
-        siteName: 'FullDeck.io',
-        title: 'Demo'
-    });
+     try{
+        var locale = this.getLocaleFromQuery();
+        pageData.shared = lx.loadShared(locale);
+        pageData.page = lx.loadPage('demo', locale);
+        yield this.render('demo', pageData);
+    }
+    catch(err){
+        this.throw(err);
+    }
+
 }

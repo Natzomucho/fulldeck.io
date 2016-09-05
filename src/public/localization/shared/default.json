@@ -1,0 +1,22 @@
+{
+  "pages": {
+    "about-us": {
+      "title": "About Us"
+    },
+    "demo": {
+      "title": "Demo"
+    },
+    "homepage": {
+      "title": "Home"
+    },
+    "legal": {
+      "title": "Legal"
+    },
+    "security": {
+      "title": "Security"
+    },
+    "technology": {
+      "title": "Technology"
+    }
+  }
+}

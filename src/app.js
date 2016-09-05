@@ -6,6 +6,7 @@ const logger = require('koa-logger');
 const json = require('koa-json-body');
 const onerror = require('koa-onerror');
 const send = require('koa-send');
+const path = require('path');
 
 // Define log options
 const logOpts = {
@@ -44,6 +45,12 @@ app.use(function *(next) {
  * Set a limit on the size of the JSON POST and PUT objects
  */
 app.use(json({ limit: '2mb' }));
+
+
+// Get locale variable from query, subdomain, the last domain, accept-languages or cookie for koa
+const locale = require('koa-locale');
+// the locale key name defaults to `locale`
+locale(app, 'locale');
 
 /**
  * Provide HTML Views for the App using doT.js

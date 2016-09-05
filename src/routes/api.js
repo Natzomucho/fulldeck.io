@@ -42,8 +42,8 @@ function *newShoe(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.newShoe(data);
+            var input = this.request.body;
+            result = yield FullDeck.newShoe(input);
             this.body=result;
         }
         catch(err){
@@ -87,8 +87,8 @@ function *readKey(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.readKey(data);
+            var input = this.request.body;
+            result = yield FullDeck.readKey(input);
             delete result.keys;
             this.body=result;
         }
@@ -102,8 +102,8 @@ function *testSign(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.testSign(data);
+            var input = this.request.body;
+            result = yield FullDeck.testSign(input);
             delete result.keys;
             this.body=result;
         }
@@ -117,8 +117,8 @@ function *testDecrypt(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.testDecrypt(data);
+            var input = this.request.body;
+            result = yield FullDeck.testDecrypt(input);
             delete result.keys;
             this.body=result;
         }
@@ -132,8 +132,8 @@ function *testEncrypt(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.testEncrypt(data);
+            var input = this.request.body;
+            result = yield FullDeck.testEncrypt(input);
             delete result.keys;
             this.body=result;
         }
@@ -147,8 +147,8 @@ function *shuffledShoe(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.shuffledShoe(data);
+            var input = this.request.body;
+            result = yield FullDeck.shuffledShoe(input);
             delete result.keys;
             this.body=result;
         }
@@ -162,8 +162,8 @@ function *indexedShoe(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.indexedShoe(data);
+            var input = this.request.body;
+            result = yield FullDeck.indexedShoe(input);
             delete result.keys;
             this.body=result;
         }
@@ -177,8 +177,8 @@ function *encryptedShoe(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.encryptedShoe(data);
+            var input = this.request.body;
+            result = yield FullDeck.encryptedShoe(input);
             delete result.keys;
             this.body=result;
         }
@@ -191,8 +191,8 @@ function *splitEncryptedShoe(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.splitEncryptedShoe(data);
+            var input = this.request.body;
+            result = yield FullDeck.splitEncryptedShoe(input);
             delete result.keys;
             this.body=result;
         }
@@ -206,8 +206,8 @@ function *splitShoeSecrets(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.splitShoeSecrets(data);
+            var input = this.request.body;
+            result = yield FullDeck.splitShoeSecrets(input);
             delete result.keys;
             this.body=result;
         }
@@ -221,8 +221,8 @@ function *combineSplitShoeSecrets(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.combineSplitShoeSecrets(data);
+            var input = this.request.body;
+            result = yield FullDeck.combineSplitShoeSecrets(input);
             delete result.keys;
             this.body=result;
         }
@@ -236,8 +236,8 @@ function *encryptCombineSplitShoeSecrets(next) {
     if (this.request.method == 'POST') {
         let result;
         try{
-            var data = this.request.body;
-            result = yield FullDeck.encryptCombineSplitShoeSecrets(data);
+            var input = this.request.body;
+            result = yield FullDeck.encryptCombineSplitShoeSecrets(input);
             delete result.keys;
             this.body=result;
         }

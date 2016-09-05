@@ -1,0 +1,14 @@
+{
+  "create-key": {
+    "val": "Create Key",
+    "opts": {
+      "player1": "Create key player 1",
+      "player2": "Create key player 2"
+    }
+  }
+  "choose-player": "Choose player",
+  "deal": "Deal",
+  "instructions": "Create a new key and then request an encrypted deck. You can then deal the cards to decrypt them."
+  "new-deck": "New Deck",
+  "play": "Play",
+}
