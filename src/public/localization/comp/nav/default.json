@@ -1,0 +1,17 @@
+{
+  "demo": {
+    "label": "Demo",
+    "label_intrigue": "Checkout the Demo!"
+  },
+  "join": {
+    "label": "Join Now!",
+    "label_short": "Join",
+    "label_intrigue": "Become a charter member"
+  },
+  "technology": {
+    "label": "Technology"
+  },
+  "legal": {
+    "label": "Legal"
+  }
+}

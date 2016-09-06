@@ -84,11 +84,11 @@ function loadComponent(componentName, locale) {
     let pageData;
 
     try{
-        pageData = require('../public/localization/component/'+componentName+'/'+locale);
+        pageData = require('../public/localization/comp/'+componentName+'/'+locale);
     }
     catch(err){
         // Swallow error and attempt to load default.
-        pageData = require('../public/localization/component/'+componentName+'/default');
+        pageData = require('../public/localization/comp/'+componentName+'/default');
     }
     return pageData;
 }

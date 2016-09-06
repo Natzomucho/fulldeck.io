@@ -11,14 +11,15 @@ let pageData = {};
 pageData.site = {};
 pageData.site.name = siteName;
 
+
 /**
  * Define routes and handlers
  */
 router.get('/', homepage);
 router.get('/technology', technology);
-router.get('/security', security);
 router.get('/legal', legal);
 router.get('/demo', demo);
+router.get('/join', join);
 
 module.exports = router;
 
@@ -27,42 +28,66 @@ module.exports = router;
  */
 
 function *homepage(next) {
-    yield this.render('homepage', {
-        siteName: siteName,
-        title: 'Welcome to FullDeck.io'
-    });
+    try{
+        var locale = this.getLocaleFromQuery();
+        pageData.shared = lx.loadShared(locale);
+        pageData.page = lx.loadPage('homepage', locale);
+        pageData.nav = lx.loadComponent('nav', locale);
+        yield this.render('homepage', pageData);
+    }
+    catch(err){
+        this.throw(err);
+    }
 }
 
 function *technology(next) {
-    yield this.render('technology', {
-        siteName: siteName,
-        title: 'Technology'
-    });
-}
-
-function *security(next) {
-    yield this.render('security', {
-        siteName: siteName,
-        title: 'Security'
-    });
+    try{
+        var locale = this.getLocaleFromQuery();
+        pageData.shared = lx.loadShared(locale);
+        pageData.page = lx.loadPage('technology', locale);
+        pageData.nav = lx.loadComponent('nav', locale);
+        yield this.render('technology', pageData);
+    }
+    catch(err){
+        this.throw(err);
+    }
 }
 
 function *legal(next) {
-    yield this.render('legal', {
-        siteName: 'FullDeck.io',
-        title: 'Legal'
-    });
+    try{
+        var locale = this.getLocaleFromQuery();
+        pageData.shared = lx.loadShared(locale);
+        pageData.page = lx.loadPage('legal', locale);
+        pageData.nav = lx.loadComponent('nav', locale);
+        yield this.render('legal', pageData);
+    }
+    catch(err){
+        this.throw(err);
+    }
 }
 
 function *demo(next) {
-     try{
+    try{
         var locale = this.getLocaleFromQuery();
         pageData.shared = lx.loadShared(locale);
         pageData.page = lx.loadPage('demo', locale);
+        pageData.nav = lx.loadComponent('nav', locale);
         yield this.render('demo', pageData);
     }
     catch(err){
         this.throw(err);
     }
+}
 
+function *join(next) {
+    try{
+        var locale = this.getLocaleFromQuery();
+        pageData.shared = lx.loadShared(locale);
+        pageData.page = lx.loadPage('join', locale);
+        pageData.nav = lx.loadComponent('nav', locale);
+        yield this.render('join', pageData);
+    }
+    catch(err){
+        this.throw(err);
+    }
 }

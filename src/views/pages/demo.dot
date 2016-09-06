@@ -1,2 +1,8 @@
-<h1 id="title">FullDeck.io Demo</h1>
-hello
+<h1 id="title"><%= it.page.title %></h1>
+
+<button onclick="loadNewDemoKey()"><%= it.page.create_key %></button> or enter key below.
+We use hex encoded strings fro a
+<div>
+Private key: <input type="text" id="p1Key" />
+Public key: <input type="text" id="p1PublicKey" />
+<div>

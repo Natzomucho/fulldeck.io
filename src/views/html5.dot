@@ -5,24 +5,34 @@
     <meta charset="UTF-8">
     <%# def.css %>
     <%# def.js %>
-<%? it.site.gaTrackingId %>
-    <!-- Google Analytics -->
-    <script>
-    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-    ga('create', '<%= it.site.gaTrackingId %>', 'auto');
-    ga('send', 'pageview');
-    </script>
-    <script async src='https://www.google-analytics.com/analytics.js'></script>
-    <!-- End Google Analytics -->
-<%?%>
+    <%? it.site.gaTrackingId %>
+        <!-- Google Analytics -->
+        <script>
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga('create', '<%= it.site.gaTrackingId %>', 'auto');
+        ga('send', 'pageview');
+        </script>
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+        <!-- End Google Analytics -->
+    <%?%>
 </head>
 <body>
-<%? it.page.header %>
-    <%= it.page.header %>
+<div class="container">
+<%? it.template && it.template.header %>
+    <%= it.template.header %>
+<%??%>
+    <%# def.nav %>
 <%?%>
+
+
     <%= it.body %>
-<%? it.page.footer %>
-    <%= it.page.footer %>
+
+<%? it.template && it.template.footer %>
+    <%= it.template.footer %>
+<%??%>
+    <%# def.footer %>
 <%?%>
+</div>
+<%# def.footerjs %>
 </body>
 </html>

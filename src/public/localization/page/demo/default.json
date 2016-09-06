@@ -1,5 +1,6 @@
 {
   "title": "Demo",
-  "start-game": "Start Game",
-  "deal-card": "Deal card"
+  "create_key": "Create key",
+  "start_game": "Start game",
+  "deal_card": "Deal card"
 }
