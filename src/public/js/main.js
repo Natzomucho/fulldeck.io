@@ -36,3 +36,9 @@ function createHexString(bytes) {
     }
     return hex.join("");
 }
+
+function getShuffledDeck() {
+    $.getJSON( "http://localhost:3000/api/demo/decks/shuffled", function( data ) {
+        $("#demoShuffledDeck").html('<pre>'+JSON.stringify(data, null, 2)+'</pre>');
+    });
+}

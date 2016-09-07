@@ -30,6 +30,8 @@ router.post('/demo/sign', testSign); // Sign a piece of text and have the sig ve
 router.post('/demo/encrypt', testEncrypt); // Sign a piece of text to see if it can be unencrypted
 router.post('/demo/decrypt', testDecrypt); // Decrypt encrypted text
 
+router.get('/demo/decks/shuffled', demoShuffledShoe); // Get a deck at the shuffled stage
+
 // Export the defined router
 module.exports = router;
 
@@ -148,6 +150,30 @@ function *shuffledShoe(next) {
         let result;
         try{
             var input = this.request.body;
+            result = yield FullDeck.shuffledShoe(input);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
+function *demoShuffledShoe(next) {
+    if (this.request.method == 'GET') {
+        let result;
+        try{
+            var input = {
+                "keys": [
+                ],
+                "numDecks": 1,
+                "deckDefinition": {
+                    "ranks": ["J","Q","K","A"],
+                    "suits": ["H","C","S","D"],
+                    "jokers": 0
+                }
+            };
             result = yield FullDeck.shuffledShoe(input);
             delete result.keys;
             this.body=result;

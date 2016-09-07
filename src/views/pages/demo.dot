@@ -1,8 +1,69 @@
 <h1 id="title"><%= it.page.title %></h1>
 
+<h2>Create a key</h2>
+<ul>
+<li>We use hex encoded secp256k1 Elliptic Curve keys.</li>
+<li>The private keys are never sent to the server.</li>
+</ul>
+<div>
 <button onclick="loadNewDemoKey()"><%= it.page.create_key %></button> or enter key below.
-We use hex encoded strings fro a
+</div>
 <div>
 Private key: <input type="text" id="p1Key" />
 Public key: <input type="text" id="p1PublicKey" />
+</div>
+
+<H2>Decks</h2>
+<ul>
+<li>You will get a 16 card deck, the J, Q, K, A of all four suits.</li>
+<li>Access to full decks are available to registered BETA testers.</li>
+</ul>
+<h3>Get a Shuffled Deck</h3>
+<ul>
+<li>This deck is unencrypted and unsigned and is only meant to demonstrate how the deck is represented without encryption.</li>
+</ul>
 <div>
+<button onclick="getShuffledDeck()">Get Shuffled Deck</button>
+</div>
+<div id="demoShuffledDeck"></div>
+
+<h3>Get an Encrypted Deck</h3>
+<ul>
+<li>This uses the public key from above.</li>
+<li>This is not the same as the unencrypted deck created. All decks are freshly shuffled.</li>
+</ul>
+<div>
+<button onclick="getEncryptedDeck()">Get Encrypted Deck</button>
+</div>
+<div id="demoEncryptedDeck"></div>
+
+<h3>Get a Signed and Sealed FullDeck</h3>
+<ul>
+<li>This uses the public key from above.</li>
+<li>This encrypted deck that is wrapped in a final encryption layer for the players and signed by FullDeck.io</li>
+<li>You can check the signature using the FullDeck.io DEMO signing key.</li>
+</ul>
+<div>
+<button onclick="getFullDeck()">Get FullDeck</button>
+</div>
+<div id="demoFullDeck"></div>
+
+<h3>Decrypt the FullDeck</h3>
+<ul>
+<li>This uses the private key created above.</li>
+<li>This should provide the same format output as the Encrypted Deck above.</li>
+</ul>
+<div>
+<button onclick="decryptFullDeck()">Decrypt Deck</button>
+</div>
+<div id="demoFullDeck"></div>
+
+<h3>Deal a Card from the encrypted deck</h3>
+<ul>
+<li>This uses the split-shared-secret part provided in the FullDeck.</li>
+<li>Multi-Player demos will be available to BETA Testers.</li>
+</ul>
+<div>
+<button onclick="decryptFullDeck()">Deal a card</button>
+</div>
+<div id="demoFullDeck"></div>
