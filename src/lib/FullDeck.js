@@ -90,7 +90,8 @@ function newShoe(data) {
             return createShoe(data);
         }).
         then(function(data){
-            data = arCrypt.convertKeysToObjects(data);
+            data = arCrypt.convertHexKeys(data);
+            //data = arCrypt.convertKeysToObjects(data);
             return data;
         }).
         then(function(data){
@@ -140,10 +141,10 @@ function encryptCombinedSecrets(data) {
 
         Promise.map(data.keys, function (key) {
 
-            secrets = data.secrets[key.alias]
+            secrets = data.secrets[key.alias];
 
             // Promise.map awaits for returned promises
-            return arCrypt.keyEncrypt(secrets, key);
+            return arCrypt.pubEncrypt(secrets, key);
 
         }).then(function (arr) {
             // Return collection of split encrypted items
@@ -153,23 +154,6 @@ function encryptCombinedSecrets(data) {
             // Return an error if something failed
             reject(err);
         });
-    });
-
-
-
-    // Return a Promise right away
-    return new Promise(function (resolve, reject) {
-
-        var secrets;
-
-        _.forEach(data.keys, function (key) {
-            secrets = data.secrets[key.alias];
-
-
-        });
-
-        resolve(data);
-
     });
 }
 
@@ -192,7 +176,7 @@ function combineSplitSecrets(data) {
         var secrets;
 
         _.forEach(cards, function (value) {
-            console.log(value);
+         //   console.log(value);
             secrets = value.secrets;
             _.forOwn(combinedSecrets, function(item, key) {
                 combinedSecrets[key].push({ seq: value.seq, secret: secrets.pop()})
@@ -223,8 +207,8 @@ function encryptShoe(shoe) {
         delete shoe.keys;
         arCrypt.encryptForeach(shoe, keys).
         then(function(shoe){
-            console.log('encryptShoe');
-            console.log(new Date());
+          //  console.log('encryptShoe');
+          //  console.log(new Date());
             resolve(shoe);
         },function(err){
             reject(err);
@@ -245,8 +229,8 @@ function splitSecrets(shoe) {
         arCrypt.splitSecrets(shoe.cards, shoe.keys).
         then(function(secretSplitCards){
             shoe.cards = secretSplitCards;
-            console.log('splitSecrets');
-            console.log(new Date());
+           // console.log('splitSecrets');
+           // console.log(new Date());
             resolve(shoe);
         },function(err){
             reject(err);
@@ -806,7 +790,7 @@ function encryptCombineSplitShoeSecrets(data) {
             return createShoe(data);
         }).
         then(function(data){
-            data = arCrypt.convertKeysToObjects(data);
+            data = arCrypt.convertHexKeys(data);
             return data;
         }).
         then(function(data){

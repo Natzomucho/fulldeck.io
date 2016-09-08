@@ -36,3 +36,14 @@ function getEncryptedDeck() {
         $("#demoEncryptedDeck").html('<pre>'+JSON.stringify(data, null, 2)+'</pre>');
     }, 'json');
 }
+
+function getSplitEncryptedDeck() {
+    var keys = [{
+        public: $("#p1PublicKey").val()
+    }];
+
+    $.post('http://localhost:3000/api/demo/deck/encrypt-combined', JSON.stringify(keys), function(data) {
+        $("#demoSplitEncryptedDeck").html('<pre>'+JSON.stringify(data, null, 2)+'</pre>');
+    }, 'json');
+}
+

@@ -37,6 +37,15 @@ Public key: <input type="text" id="p1PublicKey" />
 </div>
 <div id="demoEncryptedDeck"></div>
 
+<h3>Get an Encrypted deck w/ secrets split and encrypted for each player</h3>
+<li>This uses the public key from above.</li>
+<li>This removes the secret from each key, splits it, combines all the players secret splits and encrypts that object.</li>
+</ul>
+<div>
+<button onclick="getSplitEncryptedDeck()">Get Split-Encrypted Deck</button>
+</div>
+<div id="demoSplitEncryptedDeck"></div>
+
 <h3>Get a Signed and Sealed FullDeck</h3>
 <ul>
 <li>This uses the public key from above.</li>

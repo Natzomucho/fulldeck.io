@@ -34,6 +34,8 @@ router.get('/demo/deck/shuffled', demoShuffledShoe); // Get a deck at the shuffl
 router.post('/demo/deck/encrypted', demoEncryptedShoe); // Get a deck at the encrypted stage
 router.post('/demo/deck/split', demoSplitShoeSecrets); // Get a deck at the split secret stage
 router.post('/demo/deck/combined', demoCombineSplitShoeSecrets); // Get a deck after the split secrets have been combined for each player
+router.post('/demo/deck/encrypt-combined', demoEncryptCombineSplitShoeSecrets); // Get a deck at the combined split secret stage
+router.post('/demo/deck', demoNewShoe); // get a new demo FullDeck
 
 // Export the defined router
 module.exports = router;
@@ -318,6 +320,30 @@ function *demoCombineSplitShoeSecrets(next) {
     }
 }
 
+function *demoNewShoe(next) {
+    if (this.request.method == 'POST') {
+        let result, input, post;
+        try{
+            post = this.request.body;
+            input = {
+                "keys": post,
+                "numDecks": 1,
+                "deckDefinition": {
+                    "ranks": ["J","Q","K","A"],
+                    "suits": ["H"],
+                    "jokers": 0
+                }
+            };
+            result = yield FullDeck.newShoe(input);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
 
 function *combineSplitShoeSecrets(next) {
     if (this.request.method == 'POST') {
@@ -325,6 +351,30 @@ function *combineSplitShoeSecrets(next) {
         try{
             var input = this.request.body;
             result = yield FullDeck.combineSplitShoeSecrets(input);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
+function *demoEncryptCombineSplitShoeSecrets(next) {
+    if (this.request.method == 'POST') {
+        let result, input, post;
+        try{
+            post = this.request.body;
+            input = {
+                "keys": post,
+                "numDecks": 1,
+                "deckDefinition": {
+                    "ranks": ["J","Q","K","A"],
+                    "suits": ["H"],
+                    "jokers": 0
+                }
+            };
+            result = yield FullDeck.encryptCombineSplitShoeSecrets(input);
             delete result.keys;
             this.body=result;
         }

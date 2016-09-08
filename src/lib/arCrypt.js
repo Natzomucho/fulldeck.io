@@ -108,7 +108,25 @@ function keyFromSecret(input) {
     })
 }
 
-function pubEncrypt(input) {
+function pubEncrypt(data, key) {
+
+    return eccrypto.encrypt(key.public, stringify(data)).then(function(encrypted) {
+
+        var out = {
+            "alias": key.alias,
+            "crypted": {
+                "iv": encrypted.iv.toString('hex'),
+                "ephemPublicKey": encrypted.ephemPublicKey.toString('hex'),
+                "ciphertext": encrypted.ciphertext.toString('hex'),
+                "mac": encrypted.mac.toString('hex')
+            }
+        }
+
+        return out;
+    });
+}
+
+function pubEncrypt2(input) {
 
     var privateKeyA = new Buffer(input.private,'hex');
 
@@ -183,13 +201,7 @@ function readKey(key) {
 function encryptForeach(item, keys) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
-        encrypt(item, keys).
-        then(function(encrypted){
-            // We sent keys so the secret will be encrypted for each.
-            // We unset the public secret
-            delete encrypted.secret;
-            resolve(encrypted);
-        });
+        resolve(item);
     });
 }
 
