@@ -8,7 +8,7 @@ function loadNewDemoKey() {
 
     var publicKey = arCrypt.eccrypto.getPublic(key);
 
-    $("#p1Key").val(createHexString(key));
+    $("#p1Key").val(arCrypt.bytesToHex(key));
     $("#p1PublicKey").val(publicKey.toString('hex'));
 
 }
@@ -21,24 +21,18 @@ function getKey() {
     return privateKey;
 }
 
-// Convert a hex string to a byte array
-function hexToBytes(hex) {
-    for (var bytes = [], c = 0; c < hex.length; c += 2)
-        bytes.push(parseInt(hex.substr(c, 2), 16));
-    return bytes;
-}
-
-// Convert a byte array to a hex string
-function createHexString(bytes) {
-    for (var hex = [], i = 0; i < bytes.length; i++) {
-        hex.push((bytes[i] >>> 4).toString(16));
-        hex.push((bytes[i] & 0xF).toString(16));
-    }
-    return hex.join("");
-}
-
 function getShuffledDeck() {
-    $.getJSON( "http://localhost:3000/api/demo/decks/shuffled", function( data ) {
+    $.getJSON( "http://localhost:3000/api/demo/deck/shuffled", function( data ) {
         $("#demoShuffledDeck").html('<pre>'+JSON.stringify(data, null, 2)+'</pre>');
     });
+}
+
+function getEncryptedDeck() {
+    var keys = [{
+        public: $("#p1PublicKey").val()
+    }];
+
+    $.post('http://localhost:3000/api/demo/deck/encrypted', JSON.stringify(keys), function(data) {
+        $("#demoEncryptedDeck").html('<pre>'+JSON.stringify(data, null, 2)+'</pre>');
+    }, 'json');
 }

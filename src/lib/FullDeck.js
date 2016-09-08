@@ -615,6 +615,41 @@ function encryptedShoe(data) {
             return createShoe(data);
         }).
         then(function(data){
+            data = arCrypt.convertHexKeys(data);
+            return data;
+        }).
+        then(function(data){
+            return shuffleShoe(data);
+        }).
+        then(function(data){
+            return indexCards(data);
+        }).
+        then(function(data){
+            return encryptCards(data);
+            return data;
+        }).
+        then(function(data){
+            resolve(data);
+        }, function(err) {
+            reject(err);
+        });
+    });
+}
+
+/**
+ * Return a shuffled, indexed and encrypted shoe
+ * @param data
+ */
+function encryptedShoeOld(data) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+
+        // Start by making sure we have a valid shoe definition
+        defineShoe(data).
+        then(function(data){
+            return createShoe(data);
+        }).
+        then(function(data){
             data = arCrypt.convertKeysToObjects(data);
             return data;
         }).
@@ -626,6 +661,7 @@ function encryptedShoe(data) {
         }).
         then(function(data){
             return encryptCards(data);
+            return data;
         }).
         then(function(data){
             resolve(data);
@@ -634,6 +670,7 @@ function encryptedShoe(data) {
         });
     });
 }
+
 
 /**
  * Return a shuffled, indexed and encrypted shoe
@@ -649,7 +686,8 @@ function splitEncryptedShoe(data) {
             return createShoe(data);
         }).
         then(function(data){
-            data = arCrypt.convertKeysToObjects(data);
+            data = arCrypt.convertHexKeys(data);
+            //data = arCrypt.convertKeysToObjects(data);
             return data;
         }).
         then(function(data){
@@ -686,7 +724,8 @@ function splitShoeSecrets(data) {
             return createShoe(data);
         }).
         then(function(data){
-            data = arCrypt.convertKeysToObjects(data);
+            data = arCrypt.convertHexKeys(data);
+            //data = arCrypt.convertKeysToObjects(data);
             return data;
         }).
         then(function(data){
@@ -724,7 +763,8 @@ function combineSplitShoeSecrets(data) {
             return createShoe(data);
         }).
         then(function(data){
-            data = arCrypt.convertKeysToObjects(data);
+            data = arCrypt.convertHexKeys(data);
+            //data = arCrypt.convertKeysToObjects(data);
             return data;
         }).
         then(function(data){

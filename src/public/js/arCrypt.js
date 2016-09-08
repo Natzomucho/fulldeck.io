@@ -10,6 +10,8 @@ var eccrypto = require('eccrypto');
 exports.eccrypto = eccrypto;
 
 exports.getKey = getKey;
+exports.bytesToHex = bytesToHex;
+exports.hexToBytes = hexToBytes;
 
 function getKey() {
     var array = new Uint8Array(32);
@@ -37,4 +39,11 @@ function bytesToHex(bytes) {
         hex.push((bytes[i] & 0xF).toString(16));
     }
     return hex.join("");
+}
+
+// Convert a hex string to a byte array
+function hexToBytes(hex) {
+    for (var bytes = [], c = 0; c < hex.length; c += 2)
+        bytes.push(parseInt(hex.substr(c, 2), 16));
+    return bytes;
 }

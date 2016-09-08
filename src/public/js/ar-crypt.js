@@ -10942,6 +10942,7 @@ var eccrypto = require('eccrypto');
 exports.eccrypto = eccrypto;
 
 exports.getKey = getKey;
+  exports.bytesToHex = bytesToHex;
 
 function getKey() {
     var array = new Uint8Array(32);

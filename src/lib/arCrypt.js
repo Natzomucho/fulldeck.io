@@ -78,6 +78,9 @@ arCrypt.prototype.splitSecrets = splitSecrets;
 // Create keystore objects for all keys up front
 arCrypt.prototype.convertKeysToObjects = convertKeysToObjects;
 
+// Convert Hex keys to key objects
+arCrypt.prototype.convertHexKeys = convertHexKeys;
+
 // Read a key and create a key object from it.
 arCrypt.prototype.readKey = readKey;
 
@@ -214,6 +217,38 @@ function convertKeysToObjects(data) {
         return Promise.reject({message: err});
     })
 }
+
+function convertHexKeys(data) {
+
+    // Return many promise
+    return Promise.map(data.keys, function (key) {
+
+        // Promise.map awaits for returned promises
+        return keyFromHex(key);
+
+    }).then(function (keys) {
+        // Return collection of split secret encrypted items
+        data.keys = keys;
+        return data;
+
+    }).catch(function(err) {
+        // Return an error if something failed
+        return Promise.reject({message: err});
+    })
+}
+
+
+function keyFromHex(key) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+        var publicKey = new Buffer(key.public,'hex');
+        resolve({
+            public: publicKey,
+            alias: key.alias
+        });
+    });
+}
+
 
 /**
  * Return a Keystore

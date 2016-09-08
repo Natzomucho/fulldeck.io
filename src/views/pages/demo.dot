@@ -15,7 +15,7 @@ Public key: <input type="text" id="p1PublicKey" />
 
 <H2>Decks</h2>
 <ul>
-<li>You will get a 16 card deck, the J, Q, K, A of all four suits.</li>
+<li>You will get a 4 card deck, the J, Q, K, A of hearts.</li>
 <li>Access to full decks are available to registered BETA testers.</li>
 </ul>
 <h3>Get a Shuffled Deck</h3>

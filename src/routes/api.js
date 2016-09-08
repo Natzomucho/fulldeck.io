@@ -30,7 +30,10 @@ router.post('/demo/sign', testSign); // Sign a piece of text and have the sig ve
 router.post('/demo/encrypt', testEncrypt); // Sign a piece of text to see if it can be unencrypted
 router.post('/demo/decrypt', testDecrypt); // Decrypt encrypted text
 
-router.get('/demo/decks/shuffled', demoShuffledShoe); // Get a deck at the shuffled stage
+router.get('/demo/deck/shuffled', demoShuffledShoe); // Get a deck at the shuffled stage
+router.post('/demo/deck/encrypted', demoEncryptedShoe); // Get a deck at the encrypted stage
+router.post('/demo/deck/split', demoSplitShoeSecrets); // Get a deck at the split secret stage
+router.post('/demo/deck/combined', demoCombineSplitShoeSecrets); // Get a deck after the split secrets have been combined for each player
 
 // Export the defined router
 module.exports = router;
@@ -162,19 +165,43 @@ function *shuffledShoe(next) {
 
 function *demoShuffledShoe(next) {
     if (this.request.method == 'GET') {
-        let result;
+        let result, input;
         try{
-            var input = {
+            input = {
                 "keys": [
                 ],
                 "numDecks": 1,
                 "deckDefinition": {
                     "ranks": ["J","Q","K","A"],
-                    "suits": ["H","C","S","D"],
+                    "suits": ["H"],
                     "jokers": 0
                 }
             };
             result = yield FullDeck.shuffledShoe(input);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
+function *demoEncryptedShoe(next) {
+    if (this.request.method == 'POST') {
+        let result, input, post;
+        try{
+            post = this.request.body;
+            input = {
+                "keys": post,
+                "numDecks": 1,
+                "deckDefinition": {
+                    "ranks": ["J","Q","K","A"],
+                    "suits": ["H"],
+                    "jokers": 0
+                }
+            };
+            result = yield FullDeck.encryptedShoe(input);
             delete result.keys;
             this.body=result;
         }
@@ -242,6 +269,55 @@ function *splitShoeSecrets(next) {
         }
     }
 }
+
+function *demoSplitShoeSecrets(next) {
+    if (this.request.method == 'POST') {
+        let result, input, post;
+        try{
+            post = this.request.body;
+            input = {
+                "keys": post,
+                "numDecks": 1,
+                "deckDefinition": {
+                    "ranks": ["J","Q","K","A"],
+                    "suits": ["H"],
+                    "jokers": 0
+                }
+            };
+            result = yield FullDeck.splitShoeSecrets(input);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
+function *demoCombineSplitShoeSecrets(next) {
+    if (this.request.method == 'POST') {
+        let result, input, post;
+        try{
+            post = this.request.body;
+            input = {
+                "keys": post,
+                "numDecks": 1,
+                "deckDefinition": {
+                    "ranks": ["J","Q","K","A"],
+                    "suits": ["H"],
+                    "jokers": 0
+                }
+            };
+            result = yield FullDeck.combineSplitShoeSecrets(input);
+            delete result.keys;
+            this.body=result;
+        }
+        catch(err){
+            this.throw(err);
+        }
+    }
+}
+
 
 function *combineSplitShoeSecrets(next) {
     if (this.request.method == 'POST') {
