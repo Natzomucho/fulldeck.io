@@ -194,7 +194,8 @@ function combineSplitSecrets(data) {
 }
 
 /**
- * Encrypt the final shuffled shoe full of encrypted cards
+ * Encrypt all but the secrets using secret encryption
+ * Add the same secret to all players as seq: 0
  *
  * @param shoe
  * @returns {bluebird|exports|module.exports}
@@ -202,17 +203,16 @@ function combineSplitSecrets(data) {
 function encryptShoe(shoe) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
-        // Split secret and encrypt splits for each player
-        var keys = shoe.keys;
+        var secret = shoe.secret;
         delete shoe.keys;
-        arCrypt.encryptForeach(shoe, keys).
-        then(function(shoe){
-          //  console.log('encryptShoe');
-          //  console.log(new Date());
-            resolve(shoe);
-        },function(err){
+        delete shoe.secret;
+        arCrypt.crypt(shoe, secret).
+        then(function(crypted) {
+            resolve(crypted);
+        }, function(err) {
             reject(err);
         })
+
     });
 }
 

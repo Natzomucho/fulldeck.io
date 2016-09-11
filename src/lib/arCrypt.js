@@ -93,6 +93,9 @@ arCrypt.prototype.pubEncrypt = pubEncrypt;
 // Decrypt data w/ private key
 arCrypt.prototype.pubDecrypt = pubDecrypt;
 
+// Secret encrypt data
+arCrypt.prototype.crypt = crypt;
+
 // Export the object
 module.exports = new arCrypt();
 
@@ -201,6 +204,10 @@ function readKey(key) {
 function encryptForeach(item, keys) {
     // Return a Promise right away
     return new Promise(function (resolve, reject) {
+
+        // Encrypt Item
+
+
         resolve(item);
     });
 }
@@ -398,6 +405,30 @@ function encryptEach(arr, keys, split) {
         // Return an error if something failed
         return Promise.reject({message: err});
     })
+}
+
+function crypt(item, secret) {
+    // Return a Promise right away
+    return new Promise(function (resolve, reject) {
+        // Create a unique shared key and initialization vector
+        var sharedSecret = new Buffer(secret, 'hex'); //newSharedSecret();
+        var iv = newIV();
+
+        var cipher = crypto.Cipheriv(sharedEncryptAlgo, sharedSecret, iv);
+        var crypted = cipher.update(stringify(item), 'utf8', 'base64');
+        crypted += cipher.final('base64');
+
+        // Convert the IV to a string
+        var ivString = iv.toString('base64');
+
+        // Define the return item
+        item  = {
+            iv: ivString,
+            crypted: crypted
+        };
+
+        resolve(item);
+    });
 }
 
 /**

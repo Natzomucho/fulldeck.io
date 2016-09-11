@@ -17,6 +17,7 @@ const FullDeck = require('../lib/FullDeck');
 router.get('/keys/new', newKeys); // Get new sign/enc keys
 router.get('/keys/public', publicKeys); // Get the Organization public keys
 router.post('/decks', newShoe); // Get a signed and encrypted deck of cards
+router.post('/shoe', newShoe); // Get a signed and encrypted deck of cards
 
 // Demo routes
 router.post('/demo/decks/shuffled', shuffledShoe); // Get a deck at the shuffled stage
@@ -326,7 +327,8 @@ function *demoNewShoe(next) {
         try{
             post = this.request.body;
             input = {
-                "keys": post,
+                "secret": post.secret,
+                "keys": post.keys,
                 "numDecks": 1,
                 "deckDefinition": {
                     "ranks": ["J","Q","K","A"],
