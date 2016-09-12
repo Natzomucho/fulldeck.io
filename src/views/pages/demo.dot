@@ -48,6 +48,17 @@ Shared Secret: <input type="text" id="sharedSecret" />
 </div>
 <div id="decryptedFullDeck"></div>
 
+<h3>Decrypt the Player's secrets</h3>
+<ul>
+<li>There will be one secret for each card.</li>
+<li>The secret is split into pieces, one for each player.</li>
+<li>All players must combine their secret for a given card to be decrypted.</li>
+</ul>
+<div>
+<button onclick="decryptSecrets()">Decrypt Secrets</button>
+</div>
+<div id="decryptedSecrets"></div>
+
 <h3>Deal a Card from the encrypted deck</h3>
 <ul>
 <li>This uses the split-shared-secret part provided in the FullDeck.</li>
@@ -57,7 +68,6 @@ Shared Secret: <input type="text" id="sharedSecret" />
 <button onclick="decryptFullDeck()">Deal a card</button>
 </div>
 <div id="dealtCards"></div>
-
 
 <H2>Decks</h2>
 <ul>
