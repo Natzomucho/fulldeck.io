@@ -5,7 +5,7 @@
 <!-- Compiled and minified Materialize JavaScript -->
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
 <!-- The ActiveRules crypt lib gets exposed as `arCrypt` variable -->
-<script async src="/js/ar-crypt.js"></script>
+<script async src="/js/ar-crypto.js"></script>
 <!-- The ActiveRules lib gets exposed as `ar` variable -->
 <script async src="/js/ar.js"></script>
 <!-- Socket.io w/ P2P support -->
