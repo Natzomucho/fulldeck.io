@@ -56,7 +56,8 @@ locale(app, 'locale');
  * Provide HTML Views for the App using doT.js
  * @type {*|exports|module.exports}
  */
-const dot = require('koa-dot');
+//const dot = require('koa-dot');
+/*
 app.use(dot({
         // other options supported by doT.process can be passed here
         path: [__dirname + '/views', __dirname +'/views/pages'],
@@ -65,9 +66,19 @@ app.use(dot({
         // .def files are used only from the current folder (names can repeat across folders)
         layout: 'html5', // false by default, can be layout view name
         // body: 'body', // 'body' is default, only used with layout
-        interpolation: { start: '<%', end: '%>' } // allows to replace '{{' and '}}'
+        interpolation: { start: '<%', end: '%>' }, // allows to replace '{{' and '}}',
+        strip: false
     })
 );
+*/
+
+var handlebars = require("koa-handlebars");
+app.use(handlebars({
+    defaultLayout: "html5",
+    layoutsDir: "src/views/layouts",
+    viewsDir: "src/views"
+}));
+
 
 /**
  * Add the Koa-Router routes to the App

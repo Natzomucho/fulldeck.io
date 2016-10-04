@@ -20,6 +20,9 @@ router.get('/technology', technology);
 router.get('/legal', legal);
 router.get('/demo', demo);
 router.get('/join', join);
+router.get('/account', account);
+router.get('/view3', view3);
+router.get('/page/account', pageAccount);
 
 module.exports = router;
 
@@ -27,13 +30,53 @@ module.exports = router;
  * Define the handlers views
  */
 
+function *view3(next) {
+    try{
+        var locale = this.getLocaleFromQuery();
+        pageData.shared = lx.loadShared(locale);
+        pageData.page = lx.loadPage('homepage', locale);
+        pageData.nav = lx.loadComponent('nav', locale);
+        yield this.render('pages/homepage', pageData);
+    }
+    catch(err){
+        this.throw(err);
+    }
+}
+
+function *pageAccount(next) {
+    try{
+        var locale = this.getLocaleFromQuery();
+        pageData.shared = lx.loadShared(locale);
+        pageData.page = lx.loadPage('homepage', locale);
+        pageData.nav = lx.loadComponent('nav', locale);
+        pageData.layout = 'htmlInclude';
+        yield this.render('pages/account', pageData);
+    }
+    catch(err){
+        this.throw(err);
+    }
+}
+
+function *account(next) {
+    try{
+        var locale = this.getLocaleFromQuery();
+        pageData.shared = lx.loadShared(locale);
+        pageData.page = lx.loadPage('homepage', locale);
+        pageData.nav = lx.loadComponent('nav', locale);
+        yield this.render('pages/account', pageData);
+    }
+    catch(err){
+        this.throw(err);
+    }
+}
+
 function *homepage(next) {
     try{
         var locale = this.getLocaleFromQuery();
         pageData.shared = lx.loadShared(locale);
         pageData.page = lx.loadPage('homepage', locale);
         pageData.nav = lx.loadComponent('nav', locale);
-        yield this.render('homepage', pageData);
+        yield this.render('pages/homepage', pageData);
     }
     catch(err){
         this.throw(err);

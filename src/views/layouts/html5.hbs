@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title><%= it.site.name %> - <%= it.page.title %></title>
+    <title>{{site.name}} - {{page.title}}</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
@@ -35,11 +35,6 @@
     <meta name="msapplication-TileImage" content="/images/manifest/icon-144x144.png">
     <meta name="msapplication-TileColor" content="#3f51b5">
     <meta name="msapplication-tap-highlight" content="no">
-
-    <%# def.css %>
-    <%# def.js %>
-
-
 
     <script>
       // Setup Polymer options
@@ -105,7 +100,7 @@
         <!-- Google Analytics -->
         <script>
         window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-        ga('create', '<%= it.site.gaTrackingId %>', 'auto');
+        ga('create', '{{site.gaTrackingId}}', 'auto');
         ga('send', 'pageview');
         </script>
         <script async src='https://www.google-analytics.com/analytics.js'></script>
@@ -113,22 +108,8 @@
     <%?%>
 </head>
 <body>
-<div class="container">
-<%? it.template && it.template.header %>
-    <%= it.template.header %>
-<%??%>
-    <%# def.nav %>
-<%?%>
-
-
-    <%= it.body %>
-
-<%? it.template && it.template.footer %>
-    <%= it.template.footer %>
-<%??%>
-    <%# def.footer %>
-<%?%>
-</div>
-<%# def.footerjs %>
+<my-app></my-app>
+<!-- Built with love using Polymer Starter Kit -->
 </body>
+
 </html>
