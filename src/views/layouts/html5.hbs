@@ -17,12 +17,12 @@
 
     <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="<%= it.site.name %>">
+    <meta name="application-name" content="{{site.name}}">
 
     <!-- Add to homescreen for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="<%= it.site.name %>">
+    <meta name="apple-mobile-web-app-title" content="{{site.name}}">
 
     <!-- Homescreen icons -->
     <link rel="apple-touch-icon" href="/images/manifest/icon-48x48.png">
@@ -82,7 +82,7 @@
       }
     </script>
 
-    <link rel="import" href="/src/my-app.html">
+    <link rel="import" href="/app-chrome">
 
     <style>
       body {
@@ -95,17 +95,6 @@
     </style>
 
 
-
-    <%? it.site.gaTrackingId %>
-        <!-- Google Analytics -->
-        <script>
-        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-        ga('create', '{{site.gaTrackingId}}', 'auto');
-        ga('send', 'pageview');
-        </script>
-        <script async src='https://www.google-analytics.com/analytics.js'></script>
-        <!-- End Google Analytics -->
-    <%?%>
 </head>
 <body>
 <my-app></my-app>

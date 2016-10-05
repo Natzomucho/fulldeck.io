@@ -31,17 +31,17 @@ module.exports = arLx;
  * @param locale
  * @returns {*}
  */
-function loadPage(pageName, locale) {
+function loadPage(pageName, locale, site) {
 
     locale = locale || 'default';
     let pageData;
 
     try{
-        pageData = require('../public/localization/page/'+pageName+'/'+locale);
+        pageData = require('../config/localization/page/'+pageName+'/'+locale);
     }
     catch(err){
         // Swallow error and attempt to load default.
-        pageData = require('../public/localization/page/'+pageName+'/default');
+        pageData = require('../config/localization/page/'+pageName+'/default');
     }
 
     return pageData;
@@ -54,17 +54,17 @@ function loadPage(pageName, locale) {
  * @param locale
  * @returns {*}
  */
-function loadShared(locale) {
+function loadShared(locale, site) {
 
     locale = locale || 'default';
     let pageData;
 
     try{
-        pageData = require('../public/localization/shared/'+locale);
+        pageData = require('../config/localization/shared/'+locale);
     }
     catch(err){
         // Swallow error and attempt to load default.
-        pageData = require('../public/localization/shared/default');
+        pageData = require('../config/localization/shared/default');
     }
 
     return pageData;
@@ -78,17 +78,17 @@ function loadShared(locale) {
  * @param locale
  * @returns {*}
  */
-function loadComponent(componentName, locale) {
+function loadComponent(componentName, locale, site) {
 
     locale = locale || 'default';
     let pageData;
 
     try{
-        pageData = require('../public/localization/comp/'+componentName+'/'+locale);
+        pageData = require('../config/localization/comp/'+componentName+'/'+locale);
     }
     catch(err){
         // Swallow error and attempt to load default.
-        pageData = require('../public/localization/comp/'+componentName+'/default');
+        pageData = require('../config/localization/comp/'+componentName+'/default');
     }
     return pageData;
 }
