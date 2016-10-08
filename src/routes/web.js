@@ -71,7 +71,7 @@ function *appChrome(next) {
         var hostname = this.request.hostname;
         pageData.site = ar.site.getSiteData(hostname, rootDir);
         pageData.layout = 'htmlImport';
-        yield this.render('comp/app-chrome', pageData);
+        yield this.render('component/chrome/default', pageData);
     }
     catch(err){
         this.throw(err);
