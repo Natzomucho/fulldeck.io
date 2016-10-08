@@ -40,9 +40,9 @@ function *getAppage() {
         responseData = {};
         var hostname = this.request.hostname;
         responseData.site = ar.site.getSiteData(hostname, rootDir);
-        pageData.layout = 'htmlImport';
+        responseData.layout = 'htmlImport';
         console.log('HMMMM!!!  component/appage/' + this.params.name);
-        yield this.render('component/appage/' + this.params.name, responseData);
+        yield this.render('component/appage/account', responseData);
     }
     catch(err){
         this.throw(err);
@@ -55,7 +55,7 @@ function *getComponent() {
         responseData = {};
         var hostname = this.request.hostname;
         responseData.site = ar.site.getSiteData(hostname, rootDir);
-        pageData.layout = 'htmlImport';
+        responseData.layout = 'htmlImport';
         console.log('WTF!!!  component/' + this.params.type + '/' + this.params.name);
         yield this.render('component/' + this.params.type + '/' + this.params.name, responseData);
     }
@@ -66,7 +66,6 @@ function *getComponent() {
 
 function *appChrome(next) {
     try{
-        console.log('WTF!!! APPCHROME!!!!  component/' + this.params.type + '/' + this.params.name);
         var locale = this.getLocaleFromQuery();
         pageData = {};
         var hostname = this.request.hostname;
