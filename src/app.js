@@ -74,7 +74,7 @@ app.use(dot({
 
 var handlebars = require("koa-handlebars");
 app.use(handlebars({
-    defaultLayout: "html5",
+    defaultLayout: "spa",
     layoutsDir: "src/views/layouts",
     viewsDir: "src/views"
 }));

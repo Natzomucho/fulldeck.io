@@ -11,13 +11,17 @@ const lx = new arLx('en_US');
 
 const rootDir = path.resolve(__dirname+'/..');
 
-let pageData = {};
+let reponseData = {};
 
 /**
  * Define routes and handlers
  */
 router.get('/', spa);
 router.get('/account', spa);
+
+router.get('/demo2', demo2);
+
+router.get('/demo', demo);
 
 router.get('/app-chrome', appChrome);
 router.get('/component/:type/:name', getComponent);
@@ -45,11 +49,11 @@ function *getComponent() {
 function *appChrome(next) {
     try{
         var locale = this.getLocaleFromQuery();
-        pageData = {};
+        reponseData = {};
         var hostname = this.request.hostname;
-        pageData.site = ar.site.getSiteData(hostname, rootDir);
-        pageData.layout = 'htmlImport';
-        yield this.render('component/chrome/default', pageData);
+        reponseData.site = ar.site.getSiteData(hostname, rootDir);
+        reponseData.layout = 'htmlImport';
+        yield this.render('component/chrome/default', reponseData);
     }
     catch(err){
         this.throw(err);
@@ -59,15 +63,48 @@ function *appChrome(next) {
 function *spa(next) {
     try{
         var locale = this.getLocaleFromQuery();
-        pageData = {};
+        reponseData = {};
         var hostname = this.request.hostname;
-        pageData.site = ar.site.getSiteData(hostname, rootDir);
-        console.log(pageData);
-        pageData.shared = lx.loadShared(locale);
-        yield this.render('pages/homepage', pageData);
+        reponseData.site = ar.site.getSiteData(hostname, rootDir);
+        console.log(reponseData);
+        reponseData.shared = lx.loadShared(locale);
+        yield this.render('pages/spa', reponseData);
     }
     catch(err){
         this.throw(err);
     }
 }
 
+function *demo2(next) {
+    try{
+        var locale = this.getLocaleFromQuery();
+        reponseData = {};
+        var hostname = this.request.hostname;
+        reponseData.site = ar.site.getSiteData(hostname, rootDir);
+        console.log(reponseData);
+        reponseData.shared = lx.loadShared(locale);
+        reponseData.layout = 'fullpage';
+        yield this.render('pages/demo', reponseData);
+    }
+    catch(err){
+        this.throw(err);
+    }
+}
+
+
+function *demo(next) {
+    try{
+        var locale = this.getLocaleFromQuery();
+        reponseData = {};
+        var hostname = this.request.hostname;
+        reponseData.site = ar.site.getSiteData(hostname, rootDir);
+        console.log(reponseData);
+        reponseData.shared = lx.loadShared(locale);
+        reponseData.page = lx.loadPage('demo');
+        reponseData.layout = 'html5';
+        yield this.render('pages/demo', reponseData);
+    }
+    catch(err){
+        this.throw(err);
+    }
+}

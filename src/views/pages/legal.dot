@@ -1,5 +1,0 @@
-<h1><%= it.page.title %></h1>
-
-<h2><%= it.page.privacy_policy.title %><h2>
-
-<h2><%= it.page.terms_of_service.title %></h2>

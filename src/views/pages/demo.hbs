@@ -1,4 +1,4 @@
-<h1 id="title"><%= it.page.title %></h1>
+<h1 id="title">{{page.title}}</h1>
 
 <h2>Create a key</h2>
 <ul>
@@ -6,7 +6,7 @@
 <li>The private keys are never sent to the server.</li>
 </ul>
 <div>
-<button onclick="loadNewDemoKey()"><%= it.page.create_key %></button> or enter key below.
+<button onclick="loadNewDemoKey()">{{page.create_key}}</button> or enter key below.
 </div>
 <div>
 Private key: <input type="text" id="p1Key" />
@@ -20,7 +20,7 @@ Public key: <input type="text" id="p1PublicKey" />
 <li>A different shared secret is used amongst the players to encrypt their P2P traffic.</li>
 </ul>
 <div>
-<button onclick="loadNewSecret()"><%= it.page.create_secret %></button> or enter shared secret below.
+<button onclick="loadNewSecret()">{{page.create_secret}}</button> or enter shared secret below.
 </div>
 <div>
 Shared Secret: <input type="text" id="sharedSecret" />
