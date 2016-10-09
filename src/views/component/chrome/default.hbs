@@ -56,27 +56,29 @@
         <app-location route="\{{route}}"></app-location>
         <app-route
                 route="\{{route}}"
-                pattern="/:page"
+                pattern="/page/:page"
                 data="\{{routeData}}"
                 tail="\{{subroute}}"></app-route>
 
+        {{#if appage.appDrawerLayoutState}}
+        <app-drawer-layout {{appage.appDrawerLayoutState}}>
+        {{else}}
         <app-drawer-layout fullbleed>
+        {{/if}}
             <!-- Drawer content -->
             <app-drawer>
                 <app-toolbar>Apps</app-toolbar>
                 <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                    <a name="account" href="/account">Account</a>
-                    <a name="view1" href="/view1">View One</a>
-                    <a name="view2" href="/view2">View Two</a>
-                    <a name="view3" href="/view3">View Three</a>
-                    <a name="view4" href="/view4">View Four</a>
-                </iron-selector>
+                    <a name="account" href="/page/account">Account</a>
+                    <a name="view1" href="/page/view1">View One</a>
+                    <a name="view2" href="/page/view2">View Two</a>
+                    <a name="view3" href="/page/view3">View Three</a>
+                  </iron-selector>
             </app-drawer>
 
             <!-- Main content -->
             <app-header-layout has-scrolling-region>
-
-                <app-header condenses reveals effects="waterfall">
+                   <app-header condenses reveals effects="waterfall">
                     <app-toolbar>
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
                         <div main-title>{{site.name}}</div>
@@ -92,7 +94,7 @@
                     <my-view1 name="view1"></my-view1>
                     <my-view2 name="view2"></my-view2>
                     <my-view3 name="view3"></my-view3>
-                    <my-view4 name="view4"></my-view4>
+                    <skip-menu name="demo"></skip-menu>
                     <my-view404 name="view404"></my-view404>
                 </iron-pages>
             </app-header-layout>

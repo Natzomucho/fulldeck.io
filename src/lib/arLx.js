@@ -3,6 +3,7 @@
  * Provides localized content with fallback options.
  * @TODO create better fallback to root language
  */
+const Promise = require("bluebird");
 
 // ============================================================
 // Define the Object
@@ -12,7 +13,7 @@
 function arLx(localeRoot) {}
 
 // Return data specific to a page
-arLx.prototype.loadPage = loadPage;
+arLx.prototype.loadAppage = loadAppage;
 // Load data expecetd to be shared across any/all pages. There may be exceptions.
 arLx.prototype.loadShared = loadShared;
 // Load data expected to be shared across any/all pages. There may be exceptions.
@@ -31,20 +32,29 @@ module.exports = arLx;
  * @param locale
  * @returns {*}
  */
-function loadPage(pageName, locale, site) {
+function loadAppage(pageName, locale, site) {
 
-    locale = locale || 'default';
-    let pageData;
+    return new Promise(function (resolve, reject) {
+        locale = locale || 'default';
+        let pageData;
 
-    try{
-        pageData = require('../config/localization/page/'+pageName+'/'+locale);
-    }
-    catch(err){
-        // Swallow error and attempt to load default.
-        pageData = require('../config/localization/page/'+pageName+'/default');
-    }
+        try{
+            pageData = require('../config/localization/page/'+pageName+'/'+locale);
+        }
+        catch(err){
 
-    return pageData;
+            // Swallow error and attempt to load default.
+            try{
+                pageData = require('../config/localization/page/'+pageName+'/default');
+            }
+            catch(err){
+                pageData = {}
+            }
+        }
+
+        resolve(pageData);
+    })
+
 }
 
 
