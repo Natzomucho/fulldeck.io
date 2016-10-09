@@ -17,9 +17,6 @@ let responseData = {};
  * Define routes and handlers
  */
 router.get('/', spa);
-router.get('/account', spa);
-
-router.get('/demo2', demo2);
 
 router.get('/demo', demo);
 
@@ -40,6 +37,7 @@ function *getComponent() {
         var hostname = this.request.hostname;
         responseData.site = ar.site.getSiteData(hostname, rootDir);
         responseData.layout = 'htmlImport';
+        responseData.appage = lx.loadAppage(this.params.name);
         yield this.render('component/' + this.params.type + '/' + this.params.name, responseData);
     }
     catch(err){
@@ -81,22 +79,6 @@ function *spa(next) {
     }
 }
 
-function *demo2(next) {
-    try{
-        var locale = this.getLocaleFromQuery();
-        responseData = {};
-        var hostname = this.request.hostname;
-        responseData.site = ar.site.getSiteData(hostname, rootDir);
-        console.log(responseData);
-        responseData.shared = lx.loadShared(locale);
-        responseData.layout = 'fullpage';
-        yield this.render('pages/demo', responseData);
-    }
-    catch(err){
-        this.throw(err);
-    }
-}
-
 
 function *demo(next) {
     try{
@@ -104,14 +86,15 @@ function *demo(next) {
         responseData = {};
         var hostname = this.request.hostname;
         responseData.site = ar.site.getSiteData(hostname, rootDir);
+
+        //responseData.shared = lx.loadShared(locale);
+        responseData.page = lx.loadAppage('demo');
         console.log(responseData);
-        responseData.shared = lx.loadShared(locale);
-        responseData.page = lx.loadPage('demo');
-        if(this.query.fullpage) {
-            responseData.appDrawerLayoutState = "fullbleed force-narrow";
+        if(this.query && this.query.fullpage) {
+            responseData.page.appDrawerLayoutState = "fullbleed force-narrow";
         }
-        responseData.layout = 'html5';
-        yield this.render('pages/demo', responseData);
+        //responseData.layout = 'html5';
+        yield this.render('pages/spa', responseData);
     }
     catch(err){
         this.throw(err);

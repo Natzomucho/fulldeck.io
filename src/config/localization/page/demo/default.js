@@ -1,4 +1,4 @@
-{
+module.exports = {
   "create_key": "Create key",
   "create_secret": "Create secret",
   "deal_card": "Deal card",

@@ -34,7 +34,7 @@ module.exports = arLx;
  */
 function loadAppage(pageName, locale, site) {
 
-    return new Promise(function (resolve, reject) {
+  //  return new Promise(function (resolve, reject) {
         locale = locale || 'default';
         let pageData;
 
@@ -51,9 +51,10 @@ function loadAppage(pageName, locale, site) {
                 pageData = {}
             }
         }
+    return pageData;
 
-        resolve(pageData);
-    })
+  //      resolve(pageData);
+  //  })
 
 }
 
