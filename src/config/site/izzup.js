@@ -4,8 +4,9 @@ module.exports = {
         holder: "Izzup / Ultri"
     },
     html: {
-        css: "izzup"
+        css: "izzup",
+        homepage: "view3"
     },
     name: "izzup!",
-    nav: "businessTools"
+    nav: "izzup"
 }

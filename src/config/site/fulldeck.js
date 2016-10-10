@@ -4,8 +4,9 @@ module.exports = {
         holder: "FullDeck / Ultri"
     },
     html: {
-      css: "fulldeck"
+        css: "fulldeck",
+        homepage: "view2"
     },
     name: "FullDeck",
-    nav: "fullDeck"
+    nav: "fulldeck"
 }

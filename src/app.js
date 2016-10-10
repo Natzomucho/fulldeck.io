@@ -52,30 +52,19 @@ const locale = require('koa-locale');
 // the locale key name defaults to `locale`
 locale(app, 'locale');
 
-/**
- * Provide HTML Views for the App using doT.js
- * @type {*|exports|module.exports}
- */
-//const dot = require('koa-dot');
-/*
-app.use(dot({
-        // other options supported by doT.process can be passed here
-        path: [__dirname + '/views', __dirname +'/views/pages'],
-        // or path: ['./views', './shared'],
-        // .dot template names across all folders should be unique,
-        // .def files are used only from the current folder (names can repeat across folders)
-        layout: 'html5', // false by default, can be layout view name
-        // body: 'body', // 'body' is default, only used with layout
-        interpolation: { start: '<%', end: '%>' }, // allows to replace '{{' and '}}',
-        strip: false
-    })
-);
-*/
 
 var handlebars = require("koa-handlebars");
+
+var helpers = {};
+helpers["nav"] = function(nav) {
+    return "nav" + nav;
+}
+
 app.use(handlebars({
     defaultLayout: "spa",
+    helpers: helpers,
     layoutsDir: "src/views/layouts",
+    partialsDir: "src/views/partials",
     viewsDir: "src/views"
 }));
 

@@ -69,10 +69,7 @@
             <app-drawer>
                 <app-toolbar>Apps</app-toolbar>
                 <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                    <a name="account" href="/page/account">Account</a>
-                    <a name="view1" href="/page/view1">View One</a>
-                    <a name="view2" href="/page/view2">View Two</a>
-                    <a name="view3" href="/page/view3">View Three</a>
+                    {{> (nav site.nav) }}
                   </iron-selector>
             </app-drawer>
 
@@ -81,7 +78,7 @@
                    <app-header condenses reveals effects="waterfall">
                     <app-toolbar>
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-                        <div main-title>{{site.name}}</div>
+                        <div main-title>{{site.name}} - \{{page}}</div>
                     </app-toolbar>
                 </app-header>
 
@@ -118,18 +115,29 @@
             ],
 
             _routePageChanged: function(page) {
-                this.page = page || 'view1';
+                {{#if site.html.homepage}}
+                    this.page = page || "{{site.html.homepage}}";
+                {{else}}
+                    this.page = page || "home";
+                {{/if}}
+
             },
 
             _pageChanged: function(page) {
                 // Load page import on demand. Show 404 page if fails
                 var resolvedPageUrl = this.resolveUrl('component/appage/' + page );
                 this.importHref(resolvedPageUrl, null, this._showPage404, true);
+                var title = capitalizeFirstLetter(page);
+                document.title = "{{site.name}} - " + title;
             },
 
             _showPage404: function() {
                 this.page = 'view404';
             }
         });
+
+        function capitalizeFirstLetter(string) {
+            return string[0].toUpperCase() + string.slice(1);
+        }
     </script>
 </dom-module>
