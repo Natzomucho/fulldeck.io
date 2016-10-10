@@ -78,7 +78,7 @@
                    <app-header condenses reveals effects="waterfall">
                     <app-toolbar>
                         <paper-icon-button icon="menu" drawer-toggle></paper-icon-button>
-                        <div main-title>{{site.name}} - \{{page}}</div>
+                        <div main-title>{{site.name}} - \{{pageName}}</div>
                     </app-toolbar>
                 </app-header>
 
@@ -107,6 +107,10 @@
                     type: String,
                     reflectToAttribute: true,
                     observer: '_pageChanged'
+                },
+                pageName: {
+                    type: String,
+                    reflectToAttribute: true
                 }
             },
 
@@ -128,6 +132,7 @@
                 var resolvedPageUrl = this.resolveUrl('component/appage/' + page );
                 this.importHref(resolvedPageUrl, null, this._showPage404, true);
                 var title = capitalizeFirstLetter(page);
+                this.pageName = title;
                 document.title = "{{site.name}} - " + title;
             },
 
