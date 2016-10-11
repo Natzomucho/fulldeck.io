@@ -59,6 +59,9 @@ var helpers = {};
 helpers["nav"] = function(nav) {
     return "nav" + nav;
 }
+helpers["pages"] = function(nav) {
+    return "pages" + nav;
+}
 
 app.use(handlebars({
     defaultLayout: "spa",

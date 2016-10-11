@@ -1,12 +1,12 @@
 module.exports = {
     copyright: {
         year: "2016",
-        holder: "FullDeck / Ultri"
+        holder: "eTowneMall / Ultri"
     },
     html: {
-        css: "fulldeck",
+        css: "etownemall",
         homepage: "home"
     },
-    name: "FullDeck",
-    nav: "fulldeck"
+    name: "eTowneMall",
+    nav: "etownemall"
 }

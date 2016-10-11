@@ -5,7 +5,7 @@ module.exports = {
     },
     html: {
         css: "sharedchain",
-        homepage: "view1"
+        homepage: "home"
     },
     name: "SharedChain",
     nav: "chainLink"

@@ -5,7 +5,7 @@ module.exports = {
     },
     html: {
         css: "izzup",
-        homepage: "view3"
+        homepage: "home"
     },
     name: "izzup!",
     nav: "izzup"
