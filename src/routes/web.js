@@ -3,7 +3,7 @@ const path = require('path');
 
 const siteName = 'FullDeck.io';
 
-const ar = require('activerules');
+const ar = require('../lib/activerules');
 
 // ActiveRules Crypto lib wrapper
 const arLx = require('../lib/arLx');
